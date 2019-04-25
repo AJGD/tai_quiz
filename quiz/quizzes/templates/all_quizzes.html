@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li class="active"><a href="{% url 'quizzes:index' %}">Home</a></li>
+    <li><a href="{% url 'quizzes:create' %}">Create</a></li>
+    <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{% url 'quizzes:sign_up' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'quizzes:log_in' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+</ul>
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h2>Striped Rows</h2>
+        <p>The .table-striped class adds zebra-stripes to a table:</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Firstname</th>
+                <th>Lastname</th>
+                <th>Email</th>
+                <th>Play</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>John</td>
+                <td>Doe</td>
+                <td>john@example.com
+                <td>
+                    <a href="{% url 'quizzes:take_quiz' quiz_id=id %}" class="btn btn-default" role="button">Play</a>
+                </td>
+            </tr>
+            <tr>
+                <td>Mary</td>
+                <td>Moe</td>
+                <td>mary@example.com</td>
+                <td>
+                    <a href="{% url 'quizzes:take_quiz' quiz_id=id%}" class="btn btn-default disabled" role="button">Play</a>
+                </td>
+            </tr>
+            <tr>
+                <td>July</td>
+                <td>Dooley</td>
+                <td>july@example.com</td>
+                <td>
+                    <a href="#" class="btn btn-default disabled" role="button">Play</a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock content %}
