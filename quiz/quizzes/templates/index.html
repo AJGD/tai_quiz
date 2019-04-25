@@ -9,7 +9,11 @@
 </ul>
 <ul class="nav navbar-nav navbar-right">
     <li><a href="{% url 'quizzes:sign_up' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
-    <li><a href="{% url 'quizzes:log_in' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+    {% endif %}
 </ul>
 {% endblock navbar %}
 
@@ -18,8 +22,8 @@
     <div class="jumbotron">
         <div class="page-header">
             <h1>
-            STRONA GLOWNA
-        </h1>
+                STRONA GLOWNA
+            </h1>
         </div>
 
         <div class="basic">

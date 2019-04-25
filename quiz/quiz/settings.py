@@ -27,6 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'quiz.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [PROJECT_PATH + '/templates/'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,3 +120,6 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'quizzes.Player'
 
 AUTH_PROFILE_MODULE = 'quizzes.Player'
+
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'
