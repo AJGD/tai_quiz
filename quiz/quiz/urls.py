@@ -22,4 +22,5 @@ urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'favicon.ico')),
     path('', include('quizzes.urls')),
     path('admin/', admin.site.urls),
+    path('account/', include('django.contrib.auth.urls')),
 ]
