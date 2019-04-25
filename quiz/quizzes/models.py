@@ -15,12 +15,23 @@ class Player(AbstractUser):
         return self.username
 
 
+class Quiz(models.Model):
+    name = models.CharField(max_length=100, null=False, default='')
+    topic = models.CharField(max_length=100, null=False, default='')
+    description = models.CharField(max_length=100)
+    author = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='quiz_author')
+
+    def __str__(self):
+        return self.topic
+
+
 class Question(models.Model):
-    question_text = models.CharField(max_length=4196, null=False)
+    question_text = models.CharField(max_length=4196, null=False, default='')
     source_url = models.URLField()
-    answer = models.CharField(max_length=1000, null=False)
-    author = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='author')
+    answer = models.CharField(max_length=1000, null=False, default='')
+    author = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='question_author')
     published_date = models.DateTimeField("date published", default=timezone.now)
+    quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.question_text

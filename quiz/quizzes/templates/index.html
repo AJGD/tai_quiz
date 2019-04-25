@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li class="active"><a href="{% url 'quizzes:index' %}">Home</a></li>
+    <li><a href="{% url 'quizzes:create' %}">Create</a></li>
+    <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    <li><a href="{% url 'quizzes:games' %}">Play</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{% url 'quizzes:sign_up' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'quizzes:log_in' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+</ul>
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="jumbotron">
+        <div class="page-header">
+            <h1>
+            STRONA GLOWNA
+        </h1>
+        </div>
+
+        <div class="basic">
+            TU COŚ BĘDZIE
+        </div>
+    </div>
+    <div class="well well-lg">Large Well</div>
+    <div class="well"> Well</div>
+    <div class="well"> Well</div>
+    <div class="well"> Well</div>
+</div>
+{% endblock content %}

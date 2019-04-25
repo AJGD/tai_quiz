@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h2>Quiz details</h2>
+        <p class="well-sm"> Author: <strong>XYZ </strong></p>
+        <p class="well-sm"> Id: <strong>{{ id }}</strong></p>
+        <p class="well-sm"> Name: <strong> tu bedzie nazwa quizu</strong></p>
+        <p class="well-sm"> Topic: <strong> tu bedzie temat</strong></p>
+        <p class="well-sm"> Description: <strong> tu bedzie opis</strong></p>
+    </div>
+    <div class="jumbotron">
+        <a href="#"><button type="button" class="btn btn-primary btn-block">Start</button></a>
+        <p></p>
+        <a href="{% url 'quizzes:index' %}"><button type="button" class="btn btn-default btn-block">Return home</button></a>
+    </div>
+</div>
+{% endblock content %}
