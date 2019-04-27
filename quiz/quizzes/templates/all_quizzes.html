@@ -33,7 +33,7 @@
                 <td>Doe</td>
                 <td>john@example.com
                 <td>
-                    <a href="{% url 'quizzes:take_quiz' quiz_id=id %}" class="btn btn-default" role="button">Play</a>
+                    <a href="{% url 'quizzes:quiz' quiz_id=id %}" class="btn btn-default" role="button">Play</a>
                 </td>
             </tr>
             <tr>
@@ -41,7 +41,7 @@
                 <td>Moe</td>
                 <td>mary@example.com</td>
                 <td>
-                    <a href="{% url 'quizzes:take_quiz' quiz_id=id%}" class="btn btn-default disabled" role="button">Play</a>
+                    <a href="{% url 'quizzes:quiz' quiz_id=id%}" class="btn btn-default disabled" role="button">Play</a>
                 </td>
             </tr>
             <tr>
