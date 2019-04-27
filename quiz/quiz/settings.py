@@ -33,6 +33,7 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
 INSTALLED_APPS = [
     'quizzes.apps.QuizzesConfig',
+    'accounts.apps.AccountsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -98,6 +99,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = "quizzes.Player"
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
