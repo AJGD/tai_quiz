@@ -17,6 +17,7 @@ class Player(AbstractUser):
 
 class Quiz(models.Model):
     name = models.CharField(max_length=100, null=False, default='')
+    category = models.CharField(max_length=100, null=False, default='')
     topic = models.CharField(max_length=100, null=False, default='')
     description = models.CharField(max_length=100)
     author = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='quiz_author')

@@ -19,6 +19,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 import quiz.secret_settings as secret_settings
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = secret_settings.SECRET_KEY
 

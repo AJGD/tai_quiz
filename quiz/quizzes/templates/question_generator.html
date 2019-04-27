@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li><a href="{% url 'quizzes:index' %}">Home</a></li>
+    <li class="active"><a href="{% url 'quizzes:create' %}">Create</a></li>
+    <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{% url 'quizzes:sign_up' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'quizzes:log_in' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+</ul>
+{% endblock navbar %}
+
+{% block content %}
+
+<div class="container">
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li
+                {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="jumbotron">
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {{ form.as_p }}
+
+            <div class="container">
+                <input type="submit" value="Search"/>
+            </div>
+
+        </form>
+    </div>
+
+    {% if generated %}
+    <div class="jumbotron">
+
+        <p> Generated question: </p>
+        <p> {{ question }} </p>
+    </div>
+    {% endif %}
+
+</div>
+{% endblock content %}
