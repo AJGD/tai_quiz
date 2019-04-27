@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li><a href="{% url 'quizzes:index' %}">Home</a></li>
+    <li><a href="{% url 'quizzes:create' %}">Create</a></li>
+    <li class="active"><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    <li><a href="{% url 'quizzes:sign_up' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'quizzes:log_in' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+</ul>
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h2>Striped Rows</h2>
+        <p>The .table-striped class adds zebra-stripes to a table:</p>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Topic</th>
+                <th>Description</th>
+            </tr>
+            </thead>
+            <tr>
+                {% for quiz in quizzes %}
+            <tr class={{conflicts_color}}>
+                <td> {{ quiz.id }} </td>
+                <td> {{ quiz.name }}</td>
+                <td> {{ quiz.category }}</td>
+                <td> {{ quiz.topic }}</td>
+                <td> {{ quiz.description }}</td>
+            </tr>
+            {% endfor %}
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock content %}

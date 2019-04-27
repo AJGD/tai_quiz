@@ -1,6 +1,10 @@
-from django.shortcuts import render
-
+from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpRequest
+from django.contrib import messages
+import requests
+
+from .models import Player, Quiz
+from .forms import CreateQuizForm, CreateQuestionForm
 
 
 def index(_request: HttpRequest) -> HttpResponse:
@@ -19,14 +23,69 @@ def log_in(request: HttpRequest) -> HttpResponse:
     return render(request, 'still_working.html')
 
 
-def create(request: HttpRequest) -> HttpResponse:
+def create_quiz(request: HttpRequest) -> HttpResponse:
     """Render the create quiz page"""
-    return render(request, 'still_working.html')
+    resp = requests.get("http://en.wikipedia.org/w/api.php?action=query&prop=info&format=json&titles=Hello")
+    print(resp.status_code)  # 200
+    print(resp.json())
+    if request.method == 'POST':
+        form = CreateQuizForm(request.POST)
+        if form.is_valid():
+            added_quiz = form.save(commit=False)
+            # mock_author = Player(username="Kleofas", email="kleo@example.com")
+            # mock_author.save()
+            added_quiz.author = Player.objects.get(username="Kleofas")
+            added_quiz.save()
+            messages.success(request, 'Quiz successfully added!')
+            return redirect('quizzes:create_question')
+        else:
+            return HttpResponse("WHAT ARE YOU DOING?")
+    else:
+        form = CreateQuizForm()
+    context = {
+        'form': form
+    }
+    return render(request, 'quiz_generator.html', context=context)
+
+
+def create_question(request: HttpRequest) -> HttpResponse:
+    """Render the create quiz page"""
+    if request.method == 'POST':
+        form = CreateQuestionForm(request.POST)
+        if form.is_valid():
+            key_word = form.save(commit=False)
+            # mock_author = Player(username="Kleofas", email="kleo@example.com")
+            # mock_author.save()
+            # added_quiz.author = Player.objects.get(username="Kleofas")
+            # added_quiz.save()
+            baseurl = 'http://en.wikipedia.org/w/api.php'
+            my_atts = {}
+            my_atts['action'] = 'query'  # action=query
+            my_atts['list'] = 'search'
+            my_atts['format'] = 'json'  # format=json
+            my_atts['srsearch'] = key_word.answer
+            resp = requests.get(baseurl, params=my_atts)
+            data = resp.json()
+            messages.success(request, 'Question successfully founded!')
+            context = {
+                'form': CreateQuestionForm(),
+                'question': data,
+                'generated': True
+            }
+            return render(request, 'question_generator.html', context=context)
+        else:
+            return HttpResponse("WHAT ARE YOU DOING?")
+    return render(request, 'question_generator.html', context={'form': CreateQuestionForm(), 'generated': False})
 
 
 def list_player_quizzes(request: HttpRequest) -> HttpResponse:
     """Render the players own created quizzes page"""
-    return render(request, 'still_working.html')
+    user = Player.objects.get(username="Kleofas")
+
+    context = {
+        'quizzes': Quiz.objects.filter(author=user)
+    }
+    return render(request, 'user_quizzes.html', context)
 
 
 def choose_quiz_to_play(request: HttpRequest) -> HttpResponse:
