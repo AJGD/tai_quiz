@@ -4,8 +4,8 @@
 <ul class="nav navbar-nav">
     <li><a href="{% url 'quizzes:index' %}">Home</a></li>
     <li><a href="{% url 'quizzes:create' %}">Create</a></li>
-    <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
-    <li class="active"><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
+    <li class="active"><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
 </ul>
 <ul class="nav navbar-nav navbar-right">
     {% if user.is_authenticated %}
@@ -20,14 +20,14 @@
 {% block content %}
 <div class="container-fluid">
     <div class="jumbotron">
-        <h2>Choose quize you want to play</h2>
-        <p> If it is your quiz, you can only edit it or play as not logged player.</p>
+
+        {% if user.is_authenticated %}
+        <h2>User quizzes</h2>
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
-                <th>Author</th>
                 <th>Category</th>
                 <th>Topic</th>
                 <th>Description</th>
@@ -39,23 +39,27 @@
             <tr class={{conflicts_color}}>
                 <td> {{ quiz.id }}</td>
                 <td> {{ quiz.name }}</td>
-                <td> {{ quiz.author.username }}</td>
                 <td> {{ quiz.category }}</td>
                 <td> {{ quiz.topic }}</td>
                 <td> {{ quiz.description }}</td>
-                {% if quiz.author.username == request.user.username %}
-                <td>
-                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Edit</a>
-                </td>
-                {% else %}
                 <td>
                     <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Play</a>
                 </td>
-                {% endif %}
             </tr>
             {% endfor %}
             </tr>
         </table>
+        {% else %}
+        <div class="container">
+            <div class="alert alert-danger">
+                This page is available only for logged users.
+            </div>
+            <div class="text-center">
+                <h1 class="glyphicon glyphicon-lock"></h1>
+            </div>
+        </div>
+        {% endif %}
+
 
     </div>
 </div>
