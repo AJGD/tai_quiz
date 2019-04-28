@@ -1,12 +1,7 @@
-from django.shortcuts import render, redirect
-import requests
-from django.contrib import messages
 from django.http import HttpResponse, HttpRequest
 from django.contrib import messages
 import requests
 
-from .models import Player, Quiz
-from .forms import CreateQuizForm, CreateQuestionForm
 from django.shortcuts import render, redirect
 
 from .forms import CreateQuizForm, CreateQuestionForm
@@ -17,16 +12,6 @@ def index(_request: HttpRequest) -> HttpResponse:
     """Render the main page"""
     context: dict = {}
     return render(_request, 'index.html', context)
-
-
-def sign_up(request: HttpRequest) -> HttpResponse:
-    """Render the sign up page"""
-    return render(request, 'still_working.html')
-
-
-def log_in(request: HttpRequest) -> HttpResponse:
-    """Render the log in page"""
-    return render(request, 'still_working.html')
 
 
 def create_quiz(request: HttpRequest) -> HttpResponse:
@@ -46,7 +31,6 @@ def create_quiz(request: HttpRequest) -> HttpResponse:
                 messages.success(request, 'Quiz successfully added!')
                 return redirect('quizzes:quiz', quiz_id=added_quiz.id)
             else:
-                messages.error(request, 'unable to add quiz when user is not logged in')
                 return redirect('quizzes:index')
         else:
             return HttpResponse("WHAT ARE YOU DOING?")
@@ -90,16 +74,21 @@ def create_question(request: HttpRequest) -> HttpResponse:
 
 def list_player_quizzes(request: HttpRequest) -> HttpResponse:
     """Render the players own created quizzes page"""
-    user = Player.objects.get(username="Kleofas")
-    context = {
-        'quizzes': Quiz.objects.filter(author=user)
-    }
+    context = {}
+    if request.user.is_authenticated:
+        user = Player.objects.get(id=request.user.id)
+        context = {
+            'quizzes': Quiz.objects.filter(author=user)
+        }
     return render(request, 'user_quizzes.html', context)
 
 
 def choose_quiz_to_play(request: HttpRequest) -> HttpResponse:
     """Render the all quizzes created by all users page"""
-    return render(request, 'all_quizzes.html', context={'id': 1})
+    context = {
+        'quizzes': Quiz.objects.all()
+    }
+    return render(request, 'all_quizzes.html', context=context)
 
 
 def start_quiz(request, quiz_id):

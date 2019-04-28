@@ -8,16 +8,21 @@
     <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
 </ul>
 <ul class="nav navbar-nav navbar-right">
-    <li><a href="{% url 'quizzes:sign_up' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
-    <li><a href="{% url 'quizzes:log_in' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+    {% endif %}
 </ul>
 {% endblock navbar %}
 
 {% block content %}
 <div class="container-fluid">
     <div class="jumbotron">
-        <h2>Striped Rows</h2>
-        <p>The .table-striped class adds zebra-stripes to a table:</p>
+
+        {% if user.is_authenticated %}
+        <h2>User quizzes</h2>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -26,20 +31,36 @@
                 <th>Category</th>
                 <th>Topic</th>
                 <th>Description</th>
+                <th>Add question</th>
             </tr>
             </thead>
             <tr>
                 {% for quiz in quizzes %}
             <tr class={{conflicts_color}}>
-                <td> {{ quiz.id }} </td>
+                <td> {{ quiz.id }}</td>
                 <td> {{ quiz.name }}</td>
                 <td> {{ quiz.category }}</td>
                 <td> {{ quiz.topic }}</td>
                 <td> {{ quiz.description }}</td>
+                <td>
+                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Play</a>
+                </td>
             </tr>
             {% endfor %}
             </tr>
         </table>
+        {% else %}
+        <div class="container">
+            <div class="alert alert-danger">
+                This page is available only for logged users.
+            </div>
+            <div class="text-center">
+                <h1 class="glyphicon glyphicon-lock"></h1>
+            </div>
+        </div>
+        {% endif %}
+
+
     </div>
 </div>
 {% endblock content %}
