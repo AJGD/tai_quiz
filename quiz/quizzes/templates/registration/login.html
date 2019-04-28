@@ -2,7 +2,7 @@
 
 {% block navbar %}
 <ul class="nav navbar-nav">
-    <li class="active"><a href="{% url 'quizzes:index' %}">Home</a></li>
+    <li><a href="{% url 'quizzes:index' %}">Home</a></li>
     <li><a href="{% url 'quizzes:create' %}">Create</a></li>
     <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
     <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
@@ -12,27 +12,18 @@
     <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
     {% else %}
     <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
-    <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+    <li class="active"><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
     {% endif %}
 </ul>
 {% endblock navbar %}
 
 {% block content %}
-<div class="container-fluid">
-    <div class="jumbotron">
-        <div class="page-header">
-            <h1>
-                STRONA GLOWNA
-            </h1>
-        </div>
-
-        <div class="basic">
-            TU COŚ BĘDZIE
-        </div>
-    </div>
-    <div class="well well-lg">Large Well</div>
-    <div class="well"> Well</div>
-    <div class="well"> Well</div>
-    <div class="well"> Well</div>
+<div class="container">
+    <h2>Login</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
 </div>
 {% endblock content %}
