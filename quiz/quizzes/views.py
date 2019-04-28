@@ -16,15 +16,10 @@ def index(_request: HttpRequest) -> HttpResponse:
 
 def create_quiz(request: HttpRequest) -> HttpResponse:
     """Render the create quiz page"""
-    resp = requests.get("http://en.wikipedia.org/w/api.php?action=query&prop=info&format=json&titles=Hello")
-    print(resp.status_code)  # 200
-    print(resp.json())
     if request.method == 'POST':
         form = CreateQuizForm(request.POST)
         if form.is_valid():
             added_quiz = form.save(commit=False)
-            # mock_author = Player(username="w3d", email="kleo@example.com")
-            # mock_author.save()
             if request.user.is_authenticated:
                 added_quiz.author = Player.objects.get(pk=request.user.id)
                 added_quiz.save()
@@ -48,10 +43,6 @@ def create_question(request: HttpRequest) -> HttpResponse:
         form = CreateQuestionForm(request.POST)
         if form.is_valid():
             key_word = form.save(commit=False)
-            # mock_author = Player(username="Kleofas", email="kleo@example.com")
-            # mock_author.save()
-            # added_quiz.author = Player.objects.get(username="Kleofas")
-            # added_quiz.save()
             baseurl = 'http://en.wikipedia.org/w/api.php'
             my_atts = {}
             my_atts['action'] = 'query'  # action=query
