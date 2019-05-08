@@ -20,46 +20,22 @@
 {% block content %}
 <div class="container-fluid">
     <div class="jumbotron">
-
-        {% if user.is_authenticated %}
-        <h2>User quizzes</h2>
+        <h2>Question list from quiz {{ quiz.name }} </h2>
+        <p>In progress</p>
         <table class="table table-striped">
             <thead>
             <tr>
                 <th>Id</th>
                 <th>Name</th>
+                <th>Author</th>
                 <th>Category</th>
                 <th>Topic</th>
                 <th>Description</th>
-                <th>Edit</th>
+                <th>Add question</th>
             </tr>
             </thead>
-            <tr>
-                {% for quiz in quizzes %}
-            <tr class={{conflicts_color}}>
-                <td> {{ quiz.id }}</td>
-                <td> {{ quiz.name }}</td>
-                <td> {{ quiz.category }}</td>
-                <td> {{ quiz.topic }}</td>
-                <td> {{ quiz.description }}</td>
-                <td>
-                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Edit</a>
-                </td>
-            </tr>
-            {% endfor %}
             </tr>
         </table>
-        {% else %}
-        <div class="container">
-            <div class="alert alert-danger">
-                This page is available only for logged users.
-            </div>
-            <div class="text-center">
-                <h1 class="glyphicon glyphicon-lock"></h1>
-            </div>
-        </div>
-        {% endif %}
-
 
     </div>
 </div>

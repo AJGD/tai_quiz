@@ -87,3 +87,8 @@ def start_quiz(request, quiz_id):
     if request.user.is_authenticated and (Quiz.objects.get(pk=quiz_id).author.id == request.user.id):
         return render(request, 'quiz_edit_page.html', context={'id': quiz_id})
     return render(request, 'quiz_start_page.html', context={'id': quiz_id})
+
+
+def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
+    # TODO I-8
+    return render(request, 'question_list.html')

@@ -20,8 +20,8 @@
 {% block content %}
 <div class="container-fluid">
     <div class="jumbotron">
-        <h2>Choose quize you want to play</h2>
-        <p> If it is your quiz, you can only edit it or play as not logged player.</p>
+        <h2>Choose quiz you want to play</h2>
+        <p> If it is your quiz, you can only edit it or review or play as not logged player.</p>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -31,7 +31,7 @@
                 <th>Category</th>
                 <th>Topic</th>
                 <th>Description</th>
-                <th>Add question</th>
+                <th>Play/Edit</th>
             </tr>
             </thead>
             <tr>
@@ -43,15 +43,14 @@
                 <td> {{ quiz.category }}</td>
                 <td> {{ quiz.topic }}</td>
                 <td> {{ quiz.description }}</td>
-                {% if quiz.author.username == request.user.username %}
                 <td>
+                    {% if quiz.author.username == request.user.username %}
                     <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Edit</a>
-                </td>
-                {% else %}
-                <td>
+                    {% else %}
                     <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Play</a>
+                    {% endif %}
                 </td>
-                {% endif %}
+
             </tr>
             {% endfor %}
             </tr>
