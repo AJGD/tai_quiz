@@ -26,7 +26,7 @@ SECRET_KEY = secret_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['quizzes.pythonanywhere.com']
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
@@ -130,3 +130,7 @@ AUTH_PROFILE_MODULE = 'quizzes.Player'
 
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
