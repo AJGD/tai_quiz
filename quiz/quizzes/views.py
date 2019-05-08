@@ -37,7 +37,11 @@ def create_quiz(request: HttpRequest) -> HttpResponse:
     return render(request, 'quiz_generator.html', context=context)
 
 
-def create_question(request: HttpRequest) -> HttpResponse:
+def choose_question_type(request: HttpRequest) -> HttpResponse:
+    return render(request, 'question_type_chooser.html', context={'form': CreateQuestionForm(), 'generated': False})
+
+
+def create_question_type_title(request: HttpRequest) -> HttpResponse:
     """Render the create question page"""
     if request.method == 'POST':
         form = CreateQuestionForm(request.POST)
@@ -57,10 +61,15 @@ def create_question(request: HttpRequest) -> HttpResponse:
                 'question': data,
                 'generated': True
             }
-            return render(request, 'question_generator.html', context=context)
+            return render(request, 'question_generator_title.html', context=context)
         else:
             return HttpResponse("WHAT ARE YOU DOING?")
-    return render(request, 'question_generator.html', context={'form': CreateQuestionForm(), 'generated': False})
+    return render(request, 'question_generator_title.html', context={'form': CreateQuestionForm(), 'generated': False})
+
+
+def create_question_type_statistics(request: HttpRequest) -> HttpResponse:
+    """Render the create question page type statistics"""
+    return render(request, 'still_working.html')
 
 
 def list_player_quizzes(request: HttpRequest) -> HttpResponse:

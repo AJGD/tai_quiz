@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li><a href="{% url 'quizzes:index' %}">Home</a></li>
+    <li class="active"><a href="{% url 'quizzes:create' %}">Create</a></li>
+    <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+    {% endif %}
+</ul>
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid">
+
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li
+                {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="jumbotron">
+        <div class="page-header">
+            <h2>
+                Choose question type
+            </h2>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+
+                <a href="{% url 'quizzes:create_question_type_title' %}">
+                    <button type="button" class="btn btn-primary btn-block">Title</button>
+                </a>
+                <div class="jumbotron"> The question is generated using the title of wikipedia article. You can type
+                    topic you are interested in and app will generate the text of wiki-article, which you can modify
+                    later.
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <a href="{% url 'quizzes:create_question_type_stat' %}">
+                    <button type="button" class="btn btn-primary btn-block">Statistics</button>
+                </a>
+                <div class="jumbotron"> The question is generated using the statistics of wikipedia articles. You can type
+                    topic you are interested in and app will generate the statistics about wiki-article, for example...
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
