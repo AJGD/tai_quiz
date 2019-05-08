@@ -11,5 +11,6 @@ urlpatterns = [
     path('choose_question_type/', views.choose_question_type, name='choose_question_type'),
     path('quizzes/', views.choose_quiz_to_play, name='quizzes'),
     path('quizzes/<int:quiz_id>/', views.start_quiz, name='quiz'),
+    path('questions/<int:quiz_id>/', views.list_questions, name='questions'),
     path('my_quizzes/', views.list_player_quizzes, name='my_quizzes'),
 ]

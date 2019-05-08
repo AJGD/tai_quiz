@@ -12,12 +12,26 @@
         <p class="well-sm"> Name: <strong> tu bedzie nazwa quizu</strong></p>
         <p class="well-sm"> Topic: <strong> tu bedzie temat</strong></p>
         <p class="well-sm"> Description: <strong> tu bedzie opis</strong></p>
-        <p class="well-sm"> Questions: <strong> tu jakos wyswietlic pytania z tego quizu</strong></p>
+        <p class="well-sm"> Questions: <a href="{% url 'quizzes:questions' quiz_id=id %}">
+            <button type="button" class="btn btn-primary">List</button>
+        </a>
     </div>
+
     <div class="jumbotron">
-        <a href="{% url 'quizzes:choose_question_type' %}"><button type="button" class="btn btn-primary btn-block">Add a new question</button></a>
-        <p></p>
-        <a href="{% url 'quizzes:index' %}"><button type="button" class="btn btn-default btn-block">Return home</button></a>
+
+        <div class="row">
+            <div class="col-sm-6">
+
+                <a href="{% url 'quizzes:choose_question_type' %}">
+                    <button type="button" class="btn btn-primary btn-block">Add a new question</button>
+                </a>
+            </div>
+            <div class="col-sm-6">
+                <a href="{% url 'quizzes:index' %}">
+                    <button type="button" class="btn btn-default btn-block">Return home</button>
+                </a>
+            </div>
+        </div>
     </div>
 </div>
 {% endblock content %}
