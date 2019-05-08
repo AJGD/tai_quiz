@@ -1,10 +1,10 @@
 from django.http import HttpResponse, HttpRequest
 from django.contrib import messages
-import requests
 
 from django.shortcuts import render, redirect
 
-from .forms import CreateQuizForm, CreateQuestionForm
+from .mediawiki_utils import find_article, find_articles_list
+from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm
 from .models import Player, Quiz
 
 
@@ -41,31 +41,44 @@ def choose_question_type(request: HttpRequest) -> HttpResponse:
     return render(request, 'question_type_chooser.html', context={'form': CreateQuestionForm(), 'generated': False})
 
 
+#################################################################
+# QUESTIONS TYPE BY TITLE
+#################################################################
+
 def create_question_type_title(request: HttpRequest) -> HttpResponse:
     """Render the create question page"""
     if request.method == 'POST':
         form = CreateQuestionForm(request.POST)
         if form.is_valid():
             key_word = form.save(commit=False)
-            baseurl = 'http://en.wikipedia.org/w/api.php'
-            my_atts = {}
-            my_atts['action'] = 'query'  # action=query
-            my_atts['list'] = 'search'
-            my_atts['format'] = 'json'  # format=json
-            my_atts['srsearch'] = key_word.answer
-            resp = requests.get(baseurl, params=my_atts)
-            data = resp.json()
-            messages.success(request, 'Question successfully founded!')
-            context = {
-                'form': CreateQuestionForm(),
-                'question': data,
-                'generated': True
-            }
-            return render(request, 'question_generator_title.html', context=context)
+            return redirect('quizzes:choose_best_article', key_word=key_word.answer)
         else:
             return HttpResponse("WHAT ARE YOU DOING?")
     return render(request, 'question_generator_title.html', context={'form': CreateQuestionForm(), 'generated': False})
 
+
+def choose_best_article(request: HttpRequest, key_word) -> HttpResponse:
+    """Render the page to choose concrete article"""
+    data_list = find_articles_list(key_word)
+    if request.method == 'POST':
+        form = ChooseArticleForm(data_list, request.POST)
+        if form.is_valid():
+            pageid = form.cleaned_data['Choose article']
+            found_article = find_article(pageid)
+            context = {
+                'article': found_article[0],
+                'title': found_article[1]
+            }
+            return render(request, 'show_generated_question.html', context=context)
+        else:
+            return HttpResponse("WHAT ARE YOU DOING?")
+    context = {
+        'chooser': ChooseArticleForm(data_list)
+    }
+    return render(request, 'choose_article.html', context=context)
+
+
+#################################################################
 
 def create_question_type_statistics(request: HttpRequest) -> HttpResponse:
     """Render the create question page type statistics"""
