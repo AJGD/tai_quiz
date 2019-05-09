@@ -24,7 +24,7 @@
     <ul>
         {% for message in messages %}
         <li
-                {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+        {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
         </li>
         {% endfor %}
     </ul>
@@ -34,30 +34,14 @@
 
         {% if user.is_authenticated %}
 
-        <h2>
-            Write the name to see the list of articles.
-        </h2>
+        <h3>Found article </h3>
 
-        <form method="POST">
-            {% csrf_token %}
-            <input type="hidden" name="next" value="{{ next }}">
-            {{ form.as_p }}
+        <p> Title: {{ title }} </p>
 
-            <div class="container">
-                <input type="submit" value="Search"/>
-            </div>
-
-        </form>
-
-        {% else %}
-        <div class="container">
-            <div class="alert alert-danger">
-                This page is available only for logged users.
-            </div>
-            <div class="text-center">
-                <h1 class="glyphicon glyphicon-lock"></h1>
-            </div>
+        <div class="jumbotron">
+            {{ article }}
         </div>
+
         {% endif %}
 
     </div>
