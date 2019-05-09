@@ -58,5 +58,21 @@
             </div>
         </div>
     </div>
+
+     <div class="jumbotron">
+
+        {% if user.is_authenticated %}
+
+        <h3>Found article </h3>
+
+        <p> Title: {{ title }} </p>
+
+        <div class="jumbotron">
+            {{ article }}
+        </div>
+
+        {% endif %}
+
+    </div>
 </div>
 {% endblock content %}
