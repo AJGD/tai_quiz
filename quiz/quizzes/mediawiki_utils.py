@@ -38,7 +38,5 @@ def find_articles_list(key_word):
     my_atts['srlimit'] = 50 # default 10... for normal people 500, for bots 5000
     resp = requests.get(__base_url, params=my_atts)
     data = resp.json()['query']['search']  # extract from json
-    result = [(art['pageid'], art['title']) for art in data[:10]]  # get 10 from beginning
-    other_result = [(art['pageid'], art['title']) for art in data[-10:]]  # get 10 from somewhere
-    result = result + other_result
+    result = [(art['pageid'], art['title']) for art in data[:20]]  # get 20 from beginning
     return result

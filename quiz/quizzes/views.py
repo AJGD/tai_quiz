@@ -71,7 +71,7 @@ def choose_best_article(request: HttpRequest, key_word) -> HttpResponse:
             }
             return render(request, 'show_generated_question.html', context=context)
         else:
-            return HttpResponse("WHAT ARE YOU DOING?")
+            return render(request, 'default_error.html')
     context = {
         'chooser': ChooseArticleForm(data_list)
     }
