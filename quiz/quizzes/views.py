@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm, ChooseWordToHide
 from .mediawiki_utils import find_article, find_articles_list
-from .models import Player, Quiz
+from .models import Player, Quiz, Question
 
 
 def index(_request: HttpRequest) -> HttpResponse:
@@ -130,3 +130,7 @@ def start_quiz(request, quiz_id):
 def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
     # TODO I-8
     return render(request, 'question_list.html')
+
+
+def solve_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
+    return render(request, 'solve_quiz.html', context={'questions': Question.objects.filter(quiz=quiz_id)})

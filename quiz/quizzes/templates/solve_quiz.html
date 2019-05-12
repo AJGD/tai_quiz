@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="jumbotron">
+        {% for question in questions %}
+        <p class="well-sm"> {{question.question_text}}</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
