@@ -1,10 +1,9 @@
-from django.http import HttpResponse, HttpRequest
 from django.contrib import messages
-
+from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
-from .mediawiki_utils import find_article, find_articles_list
 from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm
+from .mediawiki_utils import find_article, find_articles_list
 from .models import Player, Quiz
 
 
@@ -37,8 +36,11 @@ def create_quiz(request: HttpRequest) -> HttpResponse:
     return render(request, 'quiz_generator.html', context=context)
 
 
-def choose_question_type(request: HttpRequest) -> HttpResponse:
-    return render(request, 'question_type_chooser.html', context={'form': CreateQuestionForm(), 'generated': False})
+def choose_question_type(request: HttpRequest, article_id) -> HttpResponse:
+    found_article = find_article(article_id)
+    return render(request, 'question_type_chooser.html',
+                  context={'form': CreateQuestionForm(), 'generated': False, 'article': found_article[0],
+                           'title': found_article[1]})
 
 
 #################################################################
@@ -46,6 +48,11 @@ def choose_question_type(request: HttpRequest) -> HttpResponse:
 #################################################################
 
 def create_question_type_title(request: HttpRequest) -> HttpResponse:
+    """create the content-based question"""
+    return render(request, 'still_working.html')
+
+
+def create_question(request: HttpRequest) -> HttpResponse:
     """Render the create question page"""
     if request.method == 'POST':
         form = CreateQuestionForm(request.POST)
@@ -53,7 +60,7 @@ def create_question_type_title(request: HttpRequest) -> HttpResponse:
             key_word = form.save(commit=False)
             return redirect('quizzes:choose_best_article', key_word=key_word.answer)
         else:
-            return HttpResponse("WHAT ARE YOU DOING?")
+            return render(request, 'default_error.html')
     return render(request, 'question_generator_title.html', context={'form': CreateQuestionForm(), 'generated': False})
 
 
@@ -64,12 +71,7 @@ def choose_best_article(request: HttpRequest, key_word) -> HttpResponse:
         form = ChooseArticleForm(data_list, request.POST)
         if form.is_valid():
             pageid = form.cleaned_data['Choose article']
-            found_article = find_article(pageid)
-            context = {
-                'article': found_article[0],
-                'title': found_article[1]
-            }
-            return render(request, 'show_generated_question.html', context=context)
+            return redirect('quizzes:choose_question_type', article_id=pageid)
         else:
             return render(request, 'default_error.html')
     context = {
