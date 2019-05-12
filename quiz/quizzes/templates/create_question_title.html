@@ -18,8 +18,8 @@
 {% endblock navbar %}
 
 {% block content %}
-<div class="container-fluid">
 
+<div class="container-fluid">
     {% if messages %}
     <ul>
         {% for message in messages %}
@@ -31,35 +31,38 @@
     {% endif %}
 
     <div class="jumbotron">
-        <div class="page-header">
-            <h2>
-                Choose question type
-            </h2>
-        </div>
 
-        <div class="row">
-            <div class="col-sm-6">
+        {% if user.is_authenticated %}
 
-                <a href="{% url 'quizzes:create_question_type_title' article_id=article_id%}">
-                    <button type="button" class="btn btn-primary btn-block">Title</button>
-                </a>
-                <div class="jumbotron"> The question is generated using the title of wikipedia article. You can type
-                    topic you are interested in and app will generate the text of wiki-article, which you can modify
-                    later.
-                </div>
+        <h2>
+            Write the word, which you want to hide from players.
+        </h2>
+
+        <form method="POST">
+            {% csrf_token %}
+            <input type="hidden" name="next" value="{{ next }}">
+            {{ chooser.as_p }}
+
+            <div class="container">
+                <input type="submit" value="Replace"/>
             </div>
-            <div class="col-sm-6">
-                <a href="{% url 'quizzes:create_question_type_stat' %}">
-                    <button type="button" class="btn btn-primary btn-block">Statistics</button>
-                </a>
-                <div class="jumbotron"> The question is generated using the statistics of wikipedia articles. You can type
-                    topic you are interested in and app will generate the statistics about wiki-article, for example...
-                </div>
+
+        </form>
+
+        {% else %}
+        <div class="container">
+            <div class="alert alert-danger">
+                This page is available only for logged users.
+            </div>
+            <div class="text-center">
+                <h1 class="glyphicon glyphicon-lock"></h1>
             </div>
         </div>
+        {% endif %}
+
     </div>
 
-     <div class="jumbotron">
+    <div class="jumbotron">
 
         {% if user.is_authenticated %}
 
@@ -74,5 +77,6 @@
         {% endif %}
 
     </div>
+
 </div>
 {% endblock content %}

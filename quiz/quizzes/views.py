@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
-from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm
+from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm, ChooseWordToHide
 from .mediawiki_utils import find_article, find_articles_list
 from .models import Player, Quiz
 
@@ -40,16 +40,30 @@ def choose_question_type(request: HttpRequest, article_id) -> HttpResponse:
     found_article = find_article(article_id)
     return render(request, 'question_type_chooser.html',
                   context={'form': CreateQuestionForm(), 'generated': False, 'article': found_article[0],
-                           'title': found_article[1]})
+                           'title': found_article[1], 'article_id': article_id})
 
 
 #################################################################
 # QUESTIONS TYPE BY TITLE
 #################################################################
 
-def create_question_type_title(request: HttpRequest) -> HttpResponse:
-    """create the content-based question"""
-    return render(request, 'still_working.html')
+def create_question_type_title(request: HttpRequest, article_id) -> HttpResponse:
+    """Render the page to choose concrete article"""
+    found_article = find_article(article_id)
+    if request.method == 'POST':
+        form = ChooseWordToHide(request.POST)
+        if form.is_valid():
+            word = form.cleaned_data['word']
+            return redirect('quizzes:create_question_type_title', article_id=article_id)
+        else:
+            return render(request, 'default_error.html')
+    context = {
+        'article_id': article_id,
+        'article': found_article[0],
+        'title': found_article[1],
+        'chooser': ChooseWordToHide()
+    }
+    return render(request, 'create_question_title.html', context=context)
 
 
 def create_question(request: HttpRequest) -> HttpResponse:
