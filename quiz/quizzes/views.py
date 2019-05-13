@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect
 
 from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm, ChooseWordToHide
 from .mediawiki_utils import find_article, find_articles_list
-from .models import Player, Quiz
+from .models import Player, Quiz, Question
 
 
 def index(_request: HttpRequest) -> HttpResponse:
@@ -36,56 +36,73 @@ def create_quiz(request: HttpRequest) -> HttpResponse:
     return render(request, 'quiz_generator.html', context=context)
 
 
-def choose_question_type(request: HttpRequest, article_id) -> HttpResponse:
+def choose_question_type(request: HttpRequest, article_id, question_id) -> HttpResponse:
+    question = Question.objects.get(pk=question_id)
+    if question.quiz.author != request.user.id:
+        render(request, 'default_error.html')
     found_article = find_article(article_id)
     return render(request, 'question_type_chooser.html',
                   context={'form': CreateQuestionForm(), 'generated': False, 'article': found_article[0],
-                           'title': found_article[1], 'article_id': article_id})
+                           'title': found_article[1], 'article_id': article_id, 'question_id': question_id})
 
 
 #################################################################
 # QUESTIONS TYPE BY TITLE
 #################################################################
 
-def create_question_type_title(request: HttpRequest, article_id) -> HttpResponse:
+def create_question_type_title(request: HttpRequest, article_id, question_id) -> HttpResponse:
     """Render the page to choose concrete article"""
+    question = Question.objects.get(pk=question_id)
+    if question.quiz.author != request.user.id:
+        render(request, 'default_error.html')
     found_article = find_article(article_id)
+    if question.question_text == '':
+        question.question_text = found_article[0]
+    if question.answer == '':
+        question.answer = found_article[1]
     if request.method == 'POST':
         form = ChooseWordToHide(request.POST)
         if form.is_valid():
             word = form.cleaned_data['word']
-            return redirect('quizzes:create_question_type_title', article_id=article_id)
+            question.question_text = question.question_text.replace(word, "####")
+            question.save()
+            redirect('quizzes:create_question_type_title', article_id=article_id, question_id=question_id)
         else:
             return render(request, 'default_error.html')
     context = {
         'article_id': article_id,
-        'article': found_article[0],
-        'title': found_article[1],
-        'chooser': ChooseWordToHide()
+        'article': question.question_text,
+        'title': question.answer,
+        'chooser': ChooseWordToHide(),
     }
     return render(request, 'create_question_title.html', context=context)
 
 
-def create_question(request: HttpRequest) -> HttpResponse:
+def create_question(request: HttpRequest, quiz_id) -> HttpResponse:
     """Render the create question page"""
+    if Quiz.objects.get(pk=quiz_id).author != request.user.id:
+        render(request, 'default_error.html')
     if request.method == 'POST':
         form = CreateQuestionForm(request.POST)
         if form.is_valid():
             key_word = form.save(commit=False)
-            return redirect('quizzes:choose_best_article', key_word=key_word.answer)
+            return redirect('quizzes:choose_best_article', key_word=key_word.answer, quiz_id=quiz_id)
         else:
             return render(request, 'default_error.html')
     return render(request, 'question_generator_title.html', context={'form': CreateQuestionForm(), 'generated': False})
 
 
-def choose_best_article(request: HttpRequest, key_word) -> HttpResponse:
+def choose_best_article(request: HttpRequest, quiz_id, key_word) -> HttpResponse:
     """Render the page to choose concrete article"""
+    if Quiz.objects.get(pk=quiz_id).author != request.user.id:
+        render(request, 'default_error.html')
     data_list = find_articles_list(key_word)
     if request.method == 'POST':
         form = ChooseArticleForm(data_list, request.POST)
         if form.is_valid():
             pageid = form.cleaned_data['Choose article']
-            return redirect('quizzes:choose_question_type', article_id=pageid)
+            question = Question.objects.create(author_id=request.user.id, quiz_id=quiz_id)
+            return redirect('quizzes:choose_question_type', article_id=pageid, question_id=question.id)
         else:
             return render(request, 'default_error.html')
     context = {
