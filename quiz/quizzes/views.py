@@ -60,6 +60,8 @@ def create_question_title(request: HttpRequest, article_id, question_id) -> Http
         question.question_text = found_article[0]
     if question.answer == '':
         question.answer = found_article[1]
+    if question.source_url == '':
+        question.source_url = found_article[2]
     if request.method == 'POST':
         form = ChooseWordToHide(request.POST)
         if form.is_valid():

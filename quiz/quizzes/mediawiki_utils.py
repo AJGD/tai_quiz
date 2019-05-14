@@ -22,7 +22,18 @@ def find_article(pageid):
     resp = requests.get(__base_url, params=my_atts)
     data = resp.json()
     article = data['query']['pages'][str(pageid)]
-    return article['extract'], article['title']
+    PARAMS = {
+        "action": "query",
+        "format": "json",
+        "titles": article['title'],
+        "prop": "info",
+        "inprop": "url|talkid"
+    }
+    resp_url = requests.get(__base_url, params=PARAMS)
+    data_url = resp_url.json()
+    article_url = data_url['query']['pages'][str(pageid)]['canonicalurl']
+    print(article_url)
+    return article['extract'], article['title'], article_url
 
 
 def find_articles_list(key_word):
@@ -38,5 +49,6 @@ def find_articles_list(key_word):
     my_atts['srlimit'] = 50 # default 10... for normal people 500, for bots 5000
     resp = requests.get(__base_url, params=my_atts)
     data = resp.json()['query']['search']  # extract from json
+    print(resp.url)
     result = [(art['pageid'], art['title']) for art in data[:20]]  # get 20 from beginning
     return result
