@@ -7,7 +7,7 @@ __base_url = 'http://en.wikipedia.org/w/api.php'
 
 def find_article(pageid):
     """
-    :param key_word: title of article
+    :param pageid: integer
     :return: text of article - 1200 chars and its title
     """
     my_atts: dict = {}

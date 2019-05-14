@@ -50,7 +50,7 @@ def choose_question_type(request: HttpRequest, article_id, question_id) -> HttpR
 # QUESTIONS TYPE BY TITLE
 #################################################################
 
-def create_question_type_title(request: HttpRequest, article_id, question_id) -> HttpResponse:
+def create_question_title(request: HttpRequest, article_id, question_id) -> HttpResponse:
     """Render the page to choose concrete article"""
     question = Question.objects.get(pk=question_id)
     if question.quiz.author != request.user.id:
@@ -65,8 +65,10 @@ def create_question_type_title(request: HttpRequest, article_id, question_id) ->
         if form.is_valid():
             word = form.cleaned_data['word']
             question.question_text = question.question_text.replace(word, "####")
+            question.type = 'Title'
+            question.article_id = article_id
             question.save()
-            redirect('quizzes:create_question_type_title', article_id=article_id, question_id=question_id)
+            redirect('quizzes:create_question_title', article_id=article_id, question_id=question_id)
         else:
             return render(request, 'default_error.html')
     context = {
@@ -101,7 +103,7 @@ def choose_best_article(request: HttpRequest, quiz_id, key_word) -> HttpResponse
         form = ChooseArticleForm(data_list, request.POST)
         if form.is_valid():
             pageid = form.cleaned_data['Choose article']
-            question = Question.objects.create(author_id=request.user.id, quiz_id=quiz_id)
+            question = Question.objects.create(author_id=request.user.id, quiz_id=quiz_id, article_id=pageid)
             return redirect('quizzes:choose_question_type', article_id=pageid, question_id=question.id)
         else:
             return render(request, 'default_error.html')
@@ -145,5 +147,9 @@ def start_quiz(request, quiz_id):
 
 
 def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
-    # TODO I-8
-    return render(request, 'question_list.html')
+    quiz = Quiz.objects.get(id=quiz_id)
+    context = {
+        'questions': Question.objects.filter(quiz=quiz),
+        'quiz': quiz
+    }
+    return render(request, 'question_list.html', context)
