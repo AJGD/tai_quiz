@@ -5,10 +5,23 @@
 
 {% block content %}
 <div class="container-fluid">
-    <div class="jumbotron">
-        {% for question in questions %}
-        <p class="well-sm"> {{question.question_text}}</p>
-        {% endfor %}
+    <div class="jumbotron">Try to guess which articles are those excepts from and enter the title under each except.
     </div>
+    <form method="POST">
+        {% csrf_token %}
+        {% for form in formset %}
+        <div class="jumbotron">
+             <input type="hidden" name="next" value="{{ next }}">
+            {{ form.initial.question.question_text }} <br/><br/>
+            {{ form.as_p }}
+        </div>
+        {{ formset.management_form }}
+        {% endfor %}
+        <div class="jumbotron">
+            <div class="container">
+                <input type="submit" value="Check results"/>
+            </div>
+        </div>
+    </form>
 </div>
 {% endblock content %}

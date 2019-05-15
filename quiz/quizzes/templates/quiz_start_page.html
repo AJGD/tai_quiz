@@ -14,7 +14,7 @@
         <p> Description: <strong> {{ quiz.description }}</strong></p>
     </div>
     <div class="jumbotron">
-        <a href="{% url 'quizzes:solve_quiz' quiz_id=id %}"><button type="button" class="btn btn-primary btn-block">Start</button></a>
+        <a href="{% url 'quizzes:solve_quiz' quiz_id=quiz.id %}"><button type="button" class="btn btn-primary btn-block">Start</button></a>
         <p></p>
         <a href="{% url 'quizzes:index' %}"><button type="button" class="btn btn-default btn-block">Return home</button></a>
     </div>
