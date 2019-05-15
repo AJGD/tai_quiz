@@ -12,7 +12,7 @@ urlpatterns = [
     path('create_question_stat/', views.create_question_type_statistics, name='create_question_type_stat'),
     path('choose_question_type/<int:question_id>/<str:article_id>', views.choose_question_type, name='choose_question_type'),
     path('quizzes/', views.choose_quiz_to_play, name='quizzes'),
-    path('quizzes/<int:quiz_id>/', views.start_quiz, name='quiz'),
+    path('quizzes/<int:quiz_id>/', views.open_quiz, name='quiz'),
     path('quizzes/<int:quiz_id>/questions', views.list_questions, name='questions'),
     path('my_quizzes/', views.list_player_quizzes, name='my_quizzes'),
 ]

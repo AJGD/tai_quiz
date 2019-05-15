@@ -141,11 +141,12 @@ def choose_quiz_to_play(request: HttpRequest) -> HttpResponse:
     return render(request, 'all_quizzes.html', context=context)
 
 
-def start_quiz(request, quiz_id):
+def open_quiz(request, quiz_id):
     """Render the single quiz page"""
-    if request.user.is_authenticated and (Quiz.objects.get(pk=quiz_id).author.id == request.user.id):
-        return render(request, 'quiz_edit_page.html', context={'id': quiz_id})
-    return render(request, 'quiz_start_page.html', context={'id': quiz_id})
+    quiz = Quiz.objects.get(pk=quiz_id)
+    if request.user.is_authenticated and (quiz.author.id == request.user.id):
+        return render(request, 'quiz_edit_page.html', context={'quiz': quiz})
+    return render(request, 'quiz_start_page.html', context={'quiz': quiz})
 
 
 def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
