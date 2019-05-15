@@ -40,7 +40,7 @@
         <div class="row">
             <div class="col-sm-6">
 
-                <a href="{% url 'quizzes:create_question_type_title' article_id=article_id%}">
+                <a href="{% url 'quizzes:create_question_title' article_id=article_id question_id=question_id%}">
                     <button type="button" class="btn btn-primary btn-block">Title</button>
                 </a>
                 <div class="jumbotron"> The question is generated using the title of wikipedia article. You can type

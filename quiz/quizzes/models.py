@@ -33,6 +33,17 @@ class Question(models.Model):
     author = models.ForeignKey(Player, on_delete=models.CASCADE, related_name='question_author')
     published_date = models.DateTimeField("date published", default=timezone.now)
     quiz = models.ForeignKey(Quiz, on_delete=models.CASCADE)
+    article_id = models.IntegerField(null=False)
+    TYPES = (
+        ('Title', 'Title'),
+        ('Stats', 'Statistics')
+    )
+
+    type = models.CharField(
+        max_length=2,
+        choices=TYPES,
+        default='Title',
+    )
 
     def __str__(self):
         return self.question_text
