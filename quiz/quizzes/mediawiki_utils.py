@@ -12,7 +12,8 @@ def find_article(pageid):
     """
     my_atts: dict = {}
     my_atts['action'] = 'query'
-    my_atts['prop'] = 'extracts'
+    my_atts['prop'] = 'extracts|info'
+    my_atts['inprop'] = 'url|talkid'
     my_atts['exintro'] = 1
     my_atts['exchars'] = 1200
     my_atts['explaintext'] = 1
@@ -22,18 +23,7 @@ def find_article(pageid):
     resp = requests.get(__base_url, params=my_atts)
     data = resp.json()
     article = data['query']['pages'][str(pageid)]
-    PARAMS = {
-        "action": "query",
-        "format": "json",
-        "titles": article['title'],
-        "prop": "info",
-        "inprop": "url|talkid"
-    }
-    resp_url = requests.get(__base_url, params=PARAMS)
-    data_url = resp_url.json()
-    article_url = data_url['query']['pages'][str(pageid)]['canonicalurl']
-    print(article_url)
-    return article['extract'], article['title'], article_url
+    return article['extract'], article['title'], article['canonicalurl']
 
 
 def find_articles_list(key_word):
