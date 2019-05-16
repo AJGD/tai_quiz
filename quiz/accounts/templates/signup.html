@@ -3,8 +3,10 @@
 {% block navbar %}
 <ul class="nav navbar-nav">
     <li><a href="{% url 'quizzes:index' %}">Home</a></li>
+    {% if user.is_authenticated %}
     <li><a href="{% url 'quizzes:create' %}">Create</a></li>
     <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    {% endif %}
     <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
 </ul>
 <ul class="nav navbar-nav navbar-right">

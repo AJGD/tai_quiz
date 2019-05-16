@@ -7,12 +7,12 @@
 <div class="container-fluid">
     <div class="jumbotron">
         <h2>Quiz details</h2>
-        <p class="well-sm"> Author: <strong>XYZ </strong></p>
-        <p class="well-sm"> Id: <strong>{{ id }}</strong></p>
-        <p class="well-sm"> Name: <strong> tu bedzie nazwa quizu</strong></p>
-        <p class="well-sm"> Topic: <strong> tu bedzie temat</strong></p>
-        <p class="well-sm"> Description: <strong> tu bedzie opis</strong></p>
-        <p class="well-sm"> Questions: <a href="{% url 'quizzes:questions' quiz_id=id %}">
+        <p> Author: <strong> {{ quiz.author }} </strong></p>
+        <p> Id: <strong>{{ quiz.id }}</strong></p>
+        <p> Name: <strong> {{ quiz.name }}</strong></p>
+        <p> Topic: <strong> {{ quiz.topic }}</strong></p>
+        <p> Description: <strong> {{ quiz.description }}</strong></p>
+        <p> Questions: <a href="{% url 'quizzes:questions' quiz_id=quiz.id %}">
             <button type="button" class="btn btn-primary">List</button>
         </a>
     </div>
@@ -22,7 +22,7 @@
         <div class="row">
             <div class="col-sm-6">
 
-                <a href="{% url 'quizzes:choose_question_type' %}">
+                <a href="{% url 'quizzes:create_question' quiz_id=quiz.id %}">
                     <button type="button" class="btn btn-primary btn-block">Add a new question</button>
                 </a>
             </div>

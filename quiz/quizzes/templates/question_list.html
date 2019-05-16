@@ -3,8 +3,10 @@
 {% block navbar %}
 <ul class="nav navbar-nav">
     <li><a href="{% url 'quizzes:index' %}">Home</a></li>
+    {% if user.is_authenticated %}
     <li><a href="{% url 'quizzes:create' %}">Create</a></li>
     <li class="active"><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    {% endif %}
     <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
 </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -20,20 +22,37 @@
 {% block content %}
 <div class="container-fluid">
     <div class="jumbotron">
-        <h2>Question list from quiz {{ quiz.name }} </h2>
-        <p>In progress</p>
+        <h2>Question list from quiz {{ quiz.name }} (id: {{ quiz.id }})</h2>
+        <p>You can edit or delete question</p>
         <table class="table table-striped">
             <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Author</th>
-                <th>Category</th>
-                <th>Topic</th>
-                <th>Description</th>
-                <th>Add question</th>
+                <th>ID</th>
+                <th>Type</th>
+                <th>Answer</th>
+                <th>Source</th>
+                <th>Published</th>
+                <th>Text</th>
+                <th>Edit</th>
             </tr>
             </thead>
+            </tr>
+            <tr>
+                {% for question in questions %}
+            <tr>
+                <td> {{ question.id }}</td>
+                <td> {{ question.type }}</td>
+                <td> {{ question.answer }}</td>
+                <td> {{ question.source_url }}</td>
+                <td> {{ question.published_date }}</td>
+                <td> {{ question.question_text }}</td>
+                <td>
+                    <a href="{% url 'quizzes:create_question_title' article_id=question.article_id question_id=question.id %}"
+                       class="btn btn-default" role="button" name="edit_button">Edit</a>
+                </td>
+
+            </tr>
+            {% endfor %}
             </tr>
         </table>
 
