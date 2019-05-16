@@ -1,8 +1,9 @@
+from django import forms
 from django.contrib import messages
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
-from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm, ChooseWordToHide
+from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm, ChooseWordToHide, EnterTitleGuess
 from .mediawiki_utils import find_article, find_articles_list
 from .models import Player, Quiz, Question
 
@@ -156,3 +157,21 @@ def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
         'quiz': quiz
     }
     return render(request, 'question_list.html', context)
+
+
+def solve_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
+    enter_title_guess_form_set = forms.formset_factory(EnterTitleGuess, extra=0)
+    questions = Question.objects.filter(quiz=quiz_id)
+    if request.method == "POST":
+        score = 0
+        questions_number = 0
+        formset = enter_title_guess_form_set(request.POST, initial=[{'question': question} for question in questions])
+        if formset.is_valid():
+            for form in formset:
+                questions_number += 1
+                cd = form.cleaned_data
+                if form.initial.get('question').answer == cd.get('Title'):
+                    score += 1
+            return render(request, 'quiz_results.html', context={'result': 100 * (score / questions_number)})
+    formset = enter_title_guess_form_set(initial=[{'question': question} for question in questions])
+    return render(request, 'solve_quiz.html', context={'formset': formset})

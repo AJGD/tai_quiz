@@ -1,7 +1,7 @@
 """Forms"""
 from django import forms
 
-from .models import Player, Question, Quiz
+from .models import Question, Quiz
 
 categories = (
     ('ACTORS', 'ACTORS'), ('AFRICA', 'AFRICA'), ('AMERICA', 'AMERICA'), ('ANATOMY', 'ANATOMY'), ('ANIMALS', 'ANIMALS'),
@@ -67,3 +67,9 @@ class ChooseArticleForm(forms.Form):
 
 class ChooseWordToHide(forms.Form):
     word = forms.CharField(max_length=200)
+
+
+class EnterTitleGuess(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(EnterTitleGuess, self).__init__(*args, **kwargs)
+        self.fields['Title'] = forms.CharField(max_length=200)
