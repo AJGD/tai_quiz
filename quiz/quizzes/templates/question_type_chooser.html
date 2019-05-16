@@ -6,7 +6,7 @@
     {% if user.is_authenticated %}
     <li class="active"><a href="{% url 'quizzes:create' %}">Create</a></li>
     <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
-    (% endif %}
+    {% endif %}
     <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
 </ul>
 <ul class="nav navbar-nav navbar-right">
