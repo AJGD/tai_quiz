@@ -40,10 +40,10 @@ categories = (
 
 class CreateQuizForm(forms.ModelForm):
     """ form to create quiz"""
-    name = forms.CharField(max_length=50, help_text='This name will be seen')
+    name = forms.CharField(max_length=50, help_text='This name will represent your quiz on the site.')
     category = forms.TypedChoiceField(choices=categories)
-    topic = forms.CharField(max_length=50, help_text='Precise category')
-    description = forms.CharField(max_length=50, required=False, help_text='Not required')
+    topic = forms.CharField(max_length=50, help_text='Choose the exact topic within the category.')
+    description = forms.CharField(max_length=50, required=False, help_text='Describe your quiz in a few words. Not required.')
 
     class Meta:
         model = Quiz

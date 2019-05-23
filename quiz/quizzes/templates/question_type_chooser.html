@@ -43,29 +43,29 @@
             <div class="col-sm-6">
 
                 <a href="{% url 'quizzes:create_question_title' article_id=article_id question_id=question_id%}">
-                    <button type="button" class="btn btn-primary btn-block">Title</button>
+                    <button type="button" class="btn btn-primary btn-block">Basic</button>
                 </a>
-                <div class="jumbotron"> The question is generated using the title of wikipedia article. You can type
-                    topic you are interested in and app will generate the text of wiki-article, which you can modify
-                    later.
+                <div class="jumbotron"> This kind of question consists of the beginning of your chosen Wikipedia article
+                    with selected words removed. In the next step, you will choose which words need to be removed to make
+                    the question not too obvious.
                 </div>
             </div>
             <div class="col-sm-6">
                 <a href="{% url 'quizzes:create_question_type_stat' %}">
                     <button type="button" class="btn btn-primary btn-block">Statistics</button>
                 </a>
-                <div class="jumbotron"> The question is generated using the statistics of wikipedia articles. You can type
-                    topic you are interested in and app will generate the statistics about wiki-article, for example...
+                <div class="jumbotron"> This kind of question asks about the statistics collected by Wikipedia.
+                    Currently creating this kind of questions is impossible.
                 </div>
             </div>
         </div>
     </div>
 
-     <div class="jumbotron">
+    <div class="jumbotron">
 
         {% if user.is_authenticated %}
 
-        <h3>Found article </h3>
+        <h3>Used article</h3>
 
         <p> Title: {{ title }} </p>
 
