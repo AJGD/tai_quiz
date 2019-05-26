@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li class="active"><a href="{% url 'quizzes:index' %}">Home</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'quizzes:create' %}">Create</a></li>
+    <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    {% endif %}
+    <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+    {% endif %}
+</ul>
+{% endblock navbar %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="jumbotron">
+        <h2>Privacy policy</h2><br/>
+        <p>This site is created and maintained by Magdalena Cudak and Aleksandra Drewnik (we're not a company, just
+            individual people). In order for this site to function we need to collect some personal data - this policy
+            explains what data it is and how we use it.</p>
+        <p>The only personal identification information we collect is: your e-mail address (if you add it to your user profile
+            or register/login via Google) and your Google profile ID (only if you register/login via Google).</p>
+        <p>We collect this data when you register on the site. We it in order to manage your account. We will not share
+            it with any advertising companies.</p>
+        <p>The data is stored on PythonAnywhere's servers. If you want to: access it, correct it, erase it, transfer
+            somewhere else - write to aleksandra.drewnik@gmail.com and we will respond within a month.</p>
+        <p>We use cookies - short text files placed on your computer - in order to keep you logged in. You can configure
+            your browser to stop us from creating cookies or erase them, but blocking cookies may make some features
+            stop working.</p>
+        <p>This policy was last updated on 23 May 2019.</p>
+    </div>
+</div>
+{% endblock content %}
