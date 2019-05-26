@@ -14,3 +14,9 @@ social-auth-app-django==3.1.0
 social-auth-core==3.1.0
 sqlparse==0.3.0
 urllib3==1.24.2
+
+#travis dependencies
+pylint==2.3.1
+pylint-django==2.0.9
+mypy==0.701
+django-stubs==0.12.1 # required for mypy
