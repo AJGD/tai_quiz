@@ -1,0 +1,22 @@
+dist: xenial
+language: python
+python:
+ - "3.7"
+
+cache: pip
+
+before_install:
+ - touch quiz/quiz/secret_settings.py
+ - echo "SECRET_KEY=\"not actually a secret key\"" > quiz/quiz/secret_settings.py
+
+install:
+  - pip install -r requirements.txt
+
+jobs:
+  include:
+    - name: "tests"
+      script: "cd quiz && python manage.py test accounts.tests quizzes.tests"
+    - name: "linter"
+      script: "pylint quiz"
+    - name: "type analysis"
+      script: "cd quiz && mypy quiz quizzes accounts"
