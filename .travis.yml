@@ -5,14 +5,18 @@ python:
 
 cache: pip
 
+before_install:
+ - touch quiz/quiz/secret_settings.py
+ - echo "SECRET_KEY=\"not actually a secret key\"" > quiz/quiz/secret_settings.py
+
 install:
   - pip install -r requirements.txt
 
 jobs:
   include:
     - name: "tests"
-      script: "./quiz/manage.py test"
+      script: "cd quiz && python manage.py test accounts.tests quizzes.tests"
     - name: "linter"
-      script: "pylint quizzes quiz"
+      script: "pylint quiz"
     - name: "type analysis"
-      script: "mypy quizzes quiz"
+      script: "cd quiz && mypy quiz quizzes accounts"
