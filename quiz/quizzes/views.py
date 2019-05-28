@@ -10,7 +10,7 @@ from .models import Player, Quiz, Question
 
 def index(_request: HttpRequest) -> HttpResponse:
     """Render the main page"""
-    context: dict = {}
+    context = {}
     return render(_request, 'index.html', context)
 
 

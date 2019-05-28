@@ -13,7 +13,8 @@
     {% if user.is_authenticated %}
     <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
     {% else %}
-    <li class="active"><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li class="active"><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a>
+    </li>
     <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
     {% endif %}
 </ul>
@@ -27,5 +28,9 @@
         {{ form.as_p }}
         <button type="submit">Sign up</button>
     </form>
+    <br/>
+    or
+    {% load staticfiles %}
+    <a href="{% url 'social:begin' 'google-oauth2' %}"><img src="{% static 'google_signin.png' %}"/></a>
 </div>
 {% endblock content %}

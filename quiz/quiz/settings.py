@@ -26,7 +26,7 @@ SECRET_KEY = secret_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['quizzes.pythonanywhere.com', '127.0.0.1']
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -66,6 +67,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -101,6 +104,14 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.open_id.OpenIdAuth',  # for Google
+    'social_core.backends.google.GoogleOpenId',  # for Google
+    'social_core.backends.google.GoogleOAuth2',  # for Google
+
+    'django.contrib.auth.backends.ModelBackend',  # so the regular will work
+)
+
 AUTH_USER_MODEL = "quizzes.Player"
 
 # Internationalization
@@ -124,9 +135,16 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
-AUTH_USER_MODEL = 'quizzes.Player'
-
 AUTH_PROFILE_MODULE = 'quizzes.Player'
 
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '60879195003-5lqtennn4j7odgq489g3s1dco5qqccvh.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secret_settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'prompt': 'select_account' }
+
+LOGIN_URL = '/account/login'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+MEDIA_URL = '/media/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

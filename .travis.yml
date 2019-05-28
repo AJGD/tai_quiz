@@ -7,7 +7,7 @@ cache: pip
 
 before_install:
  - touch quiz/quiz/secret_settings.py
- - echo "SECRET_KEY=\"not actually a secret key\"" > quiz/quiz/secret_settings.py
+ - printf "SECRET_KEY=\"not actually a secret key\"\nSOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=\"also not  a secret key\"" > quiz/quiz/secret_settings.py
 
 install:
   - pip install -r requirements.txt

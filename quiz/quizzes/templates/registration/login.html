@@ -27,5 +27,9 @@
         {{ form.as_p }}
         <button type="submit">Login</button>
     </form>
+    <br/>
+    or
+    {% load staticfiles %}
+    <a href="{% url 'social:begin' 'google-oauth2' %}"><img src="{% static 'google_signin.png' %}"/></a><br>
 </div>
 {% endblock content %}
