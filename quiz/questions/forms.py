@@ -1,4 +1,5 @@
 """Forms"""
+from bootstrap_datepicker_plus import MonthPickerInput
 from django import forms
 
 from quizzes.models import Question
@@ -22,3 +23,8 @@ class ChooseArticleForm(forms.Form):
 
 class ChooseWordToHide(forms.Form):
     word = forms.CharField(max_length=200)
+
+
+class EnterMonthAndYearForm(forms.Form):
+    date = forms.DateField(input_formats=['%Y-%m'],
+                           widget=MonthPickerInput(format='%Y-%m'))

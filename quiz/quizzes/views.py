@@ -5,7 +5,7 @@ from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
-from .forms import CreateQuizForm, EnterTitleGuess, FilterQuizForm
+from .forms import CreateQuizForm, EnterAnswerGuess, FilterQuizForm
 from .models import Player, Quiz, Question
 
 
@@ -101,7 +101,7 @@ def open_quiz(request, quiz_id):
 
 def solve_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
     """Render the page for solving the quiz"""
-    enter_title_guess_form_set = forms.formset_factory(EnterTitleGuess, extra=0)  # type: ignore
+    enter_title_guess_form_set = forms.formset_factory(EnterAnswerGuess, extra=0)  # type: ignore
     questions = Question.objects.filter(quiz=quiz_id)  # type: ignore
     if request.method == "POST":
         score = 0
