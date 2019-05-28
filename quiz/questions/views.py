@@ -3,11 +3,11 @@ from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render, redirect
-from quizzes.forms import ChooseWordToHide, CreateQuestionForm, ChooseArticleForm
 from quizzes.models import Question, Quiz
 
-from .mediawiki_utils import find_article
-from .mediawiki_utils import find_articles_list
+from .forms import ChooseWordToHide, CreateQuestionForm, ChooseArticleForm
+from .forms import EnterMonthAndYearForm
+from .mediawiki_utils import find_article, get_article_and_views, find_articles_list
 
 
 def create_question(request: HttpRequest, quiz_id) -> HttpResponse:
@@ -62,16 +62,42 @@ def initialize_question(article_id, question):
     """helper function for filling the title-type question"""
     found_article = find_article(article_id)
     if question.question_text == '':
-        question.question_text = found_article[0]
+        question.question_text = 'What is the title of this article? "' \
+                                 + found_article[0] + '"'
     if question.answer == '':
         question.answer = found_article[1]
     if question.source_url == '':
         question.source_url = found_article[2]
 
 
-def create_question_type_statistics(request: HttpRequest) -> HttpResponse:
+def create_question_type_statistics(request: HttpRequest, article_id, question_id) -> HttpResponse:
     """Render the create question page type statistics"""
-    return render(request, 'still_working.html')
+    question = Question.objects.get(pk=question_id)
+    if question.quiz.author != request.user.id:
+        render(request, 'default_error.html')
+    found_article = get_article_and_views(article_id)
+    if question.source_url == '':
+        question.source_url = found_article[2]
+    if request.method == 'POST':
+        form = EnterMonthAndYearForm(request.POST)
+        if form.is_valid():
+            question.question_text = 'How many times was the article "' + found_article[
+                0] + '" viewed in the month of ' + str(form.cleaned_data['date']) + "?"
+            question.type = 'Statistic'
+            question.article_id = article_id
+            question.save()
+            redirect('questions:create_question_type_stat', article_id=article_id, question_id=question_id)
+        else:
+            print(form.errors)
+            return render(request, 'default_error.html')
+    context = {
+        'article_id': article_id,
+        'article': question.question_text,
+        'title': found_article[0],
+        'form': EnterMonthAndYearForm(),
+        'quiz': question.quiz,
+    }
+    return render(request, 'create_question_statistics.html', context=context)
 
 
 def choose_question_type(request: HttpRequest, article_id, question_id) -> HttpResponse:

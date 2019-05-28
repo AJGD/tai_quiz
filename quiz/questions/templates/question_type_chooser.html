@@ -43,7 +43,7 @@
         <div class="row">
             <div class="col-sm-6">
 
-                <a href="{% url 'questions:create_question_title' article_id=article_id question_id=question_id%}">
+                <a href="{% url 'questions:create_question_title' article_id=article_id question_id=question_id %}">
                     <button type="button" class="btn btn-primary btn-block">Basic</button>
                 </a>
                 <div class="jumbotron"> This kind of question consists of the beginning of your chosen Wikipedia article
@@ -52,11 +52,11 @@
                 </div>
             </div>
             <div class="col-sm-6">
-                <a href="{% url 'questions:create_question_type_stat' %}">
+                <a href="{% url 'questions:create_question_type_stat' article_id=article_id question_id=question_id %}">
                     <button type="button" class="btn btn-primary btn-block">Statistics</button>
                 </a>
-                <div class="jumbotron"> This kind of question asks about the statistics collected by Wikipedia.
-                    Currently creating this kind of questions is impossible.
+                <div class="jumbotron"> This kind of question asks about how many times a particular page was viewed
+                    during a chosen month.
                 </div>
             </div>
         </div>
