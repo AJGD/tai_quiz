@@ -1,9 +1,11 @@
+"""Quizzes views"""
 from django import forms
 from django.contrib import messages
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
-from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm, ChooseWordToHide, EnterTitleGuess
+from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm, ChooseWordToHide, \
+    EnterTitleGuess
 from .mediawiki_utils import find_article, find_articles_list
 from .models import Player, Quiz, Question
 
@@ -25,26 +27,22 @@ def create_quiz(request: HttpRequest) -> HttpResponse:
                 added_quiz.save()
                 messages.success(request, 'Quiz successfully added!')
                 return redirect('quizzes:quiz', quiz_id=added_quiz.id)
-            else:
-                return redirect('quizzes:index')
-        else:
-            return HttpResponse("WHAT ARE YOU DOING?")
-    else:
-        form = CreateQuizForm()
-    context = {
-        'form': form
-    }
-    return render(request, 'quiz_generator.html', context=context)
+            return redirect('quizzes:index')
+        return HttpResponse("WHAT ARE YOU DOING?")
+    return render(request, 'quiz_generator.html', context={'form': CreateQuizForm()})
 
 
 def choose_question_type(request: HttpRequest, article_id, question_id) -> HttpResponse:
+    """Render the choose question type page"""
     question = Question.objects.get(pk=question_id)
     if question.quiz.author != request.user.id:
         render(request, 'default_error.html')
     found_article = find_article(article_id)
     return render(request, 'question_type_chooser.html',
-                  context={'form': CreateQuestionForm(), 'generated': False, 'article': found_article[0],
-                           'title': found_article[1], 'article_id': article_id, 'question_id': question_id})
+                  context={'form': CreateQuestionForm(), 'generated': False,
+                           'article': found_article[0],
+                           'title': found_article[1], 'article_id': article_id,
+                           'question_id': question_id})
 
 
 #################################################################
@@ -71,7 +69,8 @@ def create_question_title(request: HttpRequest, article_id, question_id) -> Http
             question.type = 'Title'
             question.article_id = article_id
             question.save()
-            redirect('quizzes:create_question_title', article_id=article_id, question_id=question_id)
+            redirect('quizzes:create_question_title', article_id=article_id,
+                     question_id=question_id)
         else:
             return render(request, 'default_error.html')
     context = {
@@ -92,8 +91,7 @@ def create_question(request: HttpRequest, quiz_id) -> HttpResponse:
         if form.is_valid():
             key_word = form.save(commit=False)
             return redirect('quizzes:choose_best_article', key_word=key_word.answer, quiz_id=quiz_id)
-        else:
-            return render(request, 'default_error.html')
+        return render(request, 'default_error.html')
     return render(request, 'question_generator_title.html', context={'form': CreateQuestionForm(), 'generated': False})
 
 
@@ -108,8 +106,7 @@ def choose_best_article(request: HttpRequest, quiz_id, key_word) -> HttpResponse
             pageid = form.cleaned_data['Choose article']
             question = Question.objects.create(author_id=request.user.id, quiz_id=quiz_id, article_id=pageid)
             return redirect('quizzes:choose_question_type', article_id=pageid, question_id=question.id)
-        else:
-            return render(request, 'default_error.html')
+        return render(request, 'default_error.html')
     context = {
         'chooser': ChooseArticleForm(data_list)
     }
@@ -151,6 +148,7 @@ def open_quiz(request, quiz_id):
 
 
 def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
+    """Render the page of list of all questions"""
     quiz = Quiz.objects.get(id=quiz_id)
     context = {
         'questions': Question.objects.filter(quiz=quiz),
@@ -160,18 +158,22 @@ def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
 
 
 def solve_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
+    """Render the page for solving the quiz"""
     enter_title_guess_form_set = forms.formset_factory(EnterTitleGuess, extra=0)
     questions = Question.objects.filter(quiz=quiz_id)
     if request.method == "POST":
         score = 0
         questions_number = 0
-        formset = enter_title_guess_form_set(request.POST, initial=[{'question': question} for question in questions])
+        formset = enter_title_guess_form_set(request.POST,
+                                             initial=[{'question': question}
+                                                      for question in questions])
         if formset.is_valid():
             for form in formset:
                 questions_number += 1
-                cd = form.cleaned_data
-                if form.initial.get('question').answer == cd.get('Title'):
+                cleaned_data = form.cleaned_data
+                if form.initial.get('question').answer == cleaned_data.get('Title'):
                     score += 1
-            return render(request, 'quiz_results.html', context={'result': 100 * (score / questions_number)})
+            return render(request, 'quiz_results.html',
+                          context={'result': 100 * (score / questions_number)})
     formset = enter_title_guess_form_set(initial=[{'question': question} for question in questions])
     return render(request, 'solve_quiz.html', context={'formset': formset})

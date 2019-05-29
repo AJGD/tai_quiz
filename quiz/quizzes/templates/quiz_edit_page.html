@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 
 {% block navbar %}
+<ul class="nav navbar-nav navbar-right">
+    {% if user.is_authenticated %}
+    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }} </p>
+    {% endif %}
+</ul>
 {% endblock navbar %}
 
 {% block content %}
