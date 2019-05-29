@@ -12,7 +12,7 @@ from .models import Player, Quiz, Question
 
 def index(_request: HttpRequest) -> HttpResponse:
     """Render the main page"""
-    context = {}
+    context: dict = {}
     return render(_request, 'index.html', context)
 
 
@@ -22,10 +22,10 @@ def create_quiz(request: HttpRequest) -> HttpResponse:
         form = CreateQuizForm(request.POST)
         if form.is_valid():
             added_quiz = form.save(commit=False)
-            if request.user.is_authenticated:
-                added_quiz.author = Player.objects.get(pk=request.user.id)
+            if request.user.is_authenticated:  # type: ignore
+                added_quiz.author = Player.objects.get(pk=request.user.id)  # type: ignore
                 added_quiz.save()
-                messages.success(request, 'Quiz successfully added!')
+                messages.success(request, 'Quiz successfully added!')  # type: ignore
                 return redirect('quizzes:quiz', quiz_id=added_quiz.id)
             return redirect('quizzes:index')
         return HttpResponse("WHAT ARE YOU DOING?")
@@ -34,8 +34,8 @@ def create_quiz(request: HttpRequest) -> HttpResponse:
 
 def choose_question_type(request: HttpRequest, article_id, question_id) -> HttpResponse:
     """Render the choose question type page"""
-    question = Question.objects.get(pk=question_id)
-    if question.quiz.author != request.user.id:
+    question = Question.objects.get(pk=question_id)  # type: ignore
+    if question.quiz.author != request.user.id:  # type: ignore
         render(request, 'default_error.html')
     found_article = find_article(article_id)
     return render(request, 'question_type_chooser.html',
@@ -51,8 +51,8 @@ def choose_question_type(request: HttpRequest, article_id, question_id) -> HttpR
 
 def create_question_title(request: HttpRequest, article_id, question_id) -> HttpResponse:
     """Render the page to choose concrete article"""
-    question = Question.objects.get(pk=question_id)
-    if question.quiz.author != request.user.id:
+    question = Question.objects.get(pk=question_id)  # type: ignore
+    if question.quiz.author != request.user.id:  # type: ignore
         render(request, 'default_error.html')
     found_article = find_article(article_id)
     if question.question_text == '':
@@ -84,28 +84,32 @@ def create_question_title(request: HttpRequest, article_id, question_id) -> Http
 
 def create_question(request: HttpRequest, quiz_id) -> HttpResponse:
     """Render the create question page"""
-    if Quiz.objects.get(pk=quiz_id).author != request.user.id:
+    if Quiz.objects.get(pk=quiz_id).author != request.user.id:  # type: ignore
         render(request, 'default_error.html')
     if request.method == 'POST':
         form = CreateQuestionForm(request.POST)
         if form.is_valid():
             key_word = form.save(commit=False)
-            return redirect('quizzes:choose_best_article', key_word=key_word.answer, quiz_id=quiz_id)
+            return redirect('quizzes:choose_best_article',
+                            key_word=key_word.answer, quiz_id=quiz_id)
         return render(request, 'default_error.html')
-    return render(request, 'question_generator_title.html', context={'form': CreateQuestionForm(), 'generated': False})
+    return render(request, 'question_generator_title.html',
+                  context={'form': CreateQuestionForm(), 'generated': False})
 
 
 def choose_best_article(request: HttpRequest, quiz_id, key_word) -> HttpResponse:
     """Render the page to choose concrete article"""
-    if Quiz.objects.get(pk=quiz_id).author != request.user.id:
+    if Quiz.objects.get(pk=quiz_id).author != request.user.id:  # type: ignore
         render(request, 'default_error.html')
     data_list = find_articles_list(key_word)
     if request.method == 'POST':
         form = ChooseArticleForm(data_list, request.POST)
         if form.is_valid():
             pageid = form.cleaned_data['Choose article']
-            question = Question.objects.create(author_id=request.user.id, quiz_id=quiz_id, article_id=pageid)
-            return redirect('quizzes:choose_question_type', article_id=pageid, question_id=question.id)
+            question = Question.objects.create(  # type: ignore
+                author_id=request.user.id, quiz_id=quiz_id, article_id=pageid)  # type: ignore
+            return redirect('quizzes:choose_question_type',
+                            article_id=pageid, question_id=question.id)
         return render(request, 'default_error.html')
     context = {
         'chooser': ChooseArticleForm(data_list)
@@ -122,11 +126,11 @@ def create_question_type_statistics(request: HttpRequest) -> HttpResponse:
 
 def list_player_quizzes(request: HttpRequest) -> HttpResponse:
     """Render the players own created quizzes page"""
-    context = {}
-    if request.user.is_authenticated:
-        user = Player.objects.get(id=request.user.id)
+    context: dict = {}
+    if request.user.is_authenticated:  # type: ignore
+        user = Player.objects.get(id=request.user.id)  # type: ignore
         context = {
-            'quizzes': Quiz.objects.filter(author=user)
+            'quizzes': Quiz.objects.filter(author=user)  # type: ignore
         }
     return render(request, 'user_quizzes.html', context)
 
@@ -134,14 +138,14 @@ def list_player_quizzes(request: HttpRequest) -> HttpResponse:
 def choose_quiz_to_play(request: HttpRequest) -> HttpResponse:
     """Render the all quizzes created by all users page"""
     context = {
-        'quizzes': Quiz.objects.all()
+        'quizzes': Quiz.objects.all()  # type: ignore
     }
     return render(request, 'all_quizzes.html', context=context)
 
 
 def open_quiz(request, quiz_id):
     """Render the single quiz page"""
-    quiz = Quiz.objects.get(pk=quiz_id)
+    quiz = Quiz.objects.get(pk=quiz_id)  # type: ignore
     if request.user.is_authenticated and (quiz.author.id == request.user.id):
         return render(request, 'quiz_edit_page.html', context={'quiz': quiz})
     return render(request, 'quiz_start_page.html', context={'quiz': quiz})
@@ -149,9 +153,9 @@ def open_quiz(request, quiz_id):
 
 def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
     """Render the page of list of all questions"""
-    quiz = Quiz.objects.get(id=quiz_id)
+    quiz = Quiz.objects.get(id=quiz_id)  # type: ignore
     context = {
-        'questions': Question.objects.filter(quiz=quiz),
+        'questions': Question.objects.filter(quiz=quiz),  # type: ignore
         'quiz': quiz
     }
     return render(request, 'question_list.html', context)
@@ -159,8 +163,8 @@ def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
 
 def solve_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
     """Render the page for solving the quiz"""
-    enter_title_guess_form_set = forms.formset_factory(EnterTitleGuess, extra=0)
-    questions = Question.objects.filter(quiz=quiz_id)
+    enter_title_guess_form_set = forms.formset_factory(EnterTitleGuess, extra=0)  # type: ignore
+    questions = Question.objects.filter(quiz=quiz_id)  # type: ignore
     if request.method == "POST":
         score = 0
         questions_number = 0

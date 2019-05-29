@@ -411,7 +411,7 @@ const-naming-style=UPPER_CASE
 # Regular expression matching correct constant names. Overrides const-naming-
 # style.
 # Either lowercase-only or uppercase-only
-const-rgx=^([a-z_][a-z0-9_]{2,30}|[A-Z_][A-Z0-9_]{2,30})$
+const-rgx=
 
 # Minimum line length for functions/classes that require docstrings, shorter
 # ones are exempt.
@@ -528,7 +528,7 @@ max-branches=12
 max-locals=20
 
 # Maximum number of parents for a class (see R0901).
-max-parents=7
+max-parents=15
 
 # Maximum number of public methods for a class (see R0904).
 max-public-methods=20

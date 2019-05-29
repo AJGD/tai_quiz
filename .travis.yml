@@ -7,7 +7,7 @@ cache: pip
 
 before_install:
  - touch quiz/quiz/secret_settings.py
- - printf "SECRET_KEY=\"not actually a secret key\"\nSOCIAL_AUTH_GOOGLE_OAUTH2_SECRET=\"also not  a secret key\"" > quiz/quiz/secret_settings.py
+ - printf "\"\"\"things that shouldn't be out there\"\"\"\nSECRET_KEY = \"not actually a secret key\"\nSOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = \"also not  a secret key\"\n" > quiz/quiz/secret_settings.py
 
 install:
   - pip install -r requirements.txt
@@ -17,6 +17,6 @@ jobs:
     - name: "tests"
       script: "cd quiz && python manage.py test accounts.tests quizzes.tests"
     - name: "linter"
-      script: "pylint quiz"
+      script: "cd quiz && pylint quiz quizzes accounts"
     - name: "type analysis"
       script: "cd quiz && mypy quiz quizzes accounts"
