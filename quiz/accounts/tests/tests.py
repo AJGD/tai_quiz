@@ -1,10 +1,9 @@
-"""Tests"""
+"""tests for the 'accounts' app"""
 from django.test import TestCase
 
 
 class SampleTestClass(TestCase):
-    """Example Test"""
-
+    """Placeholder test for the 'accounts' app."""
     @classmethod
     def setUpTestData(cls):
         print("setUpTestData: Run once to set up non-modified data for all class methods.")
@@ -14,7 +13,7 @@ class SampleTestClass(TestCase):
 
     def test_false_is_false(self):
         print("Method: test_false_is_false.")
-        self.assertFalse((lambda x: x == 2)(1))
+        self.assertFalse((lambda x: x > 0)(-1))
 
     def test_one_plus_one_equals_two(self):
         print("Method: test_one_plus_one_equals_two.")
