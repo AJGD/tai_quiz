@@ -1,9 +1,11 @@
+"""Quizzes models"""
 from django.utils import timezone
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 class Player(AbstractUser):
+    """User of app"""
     username = models.CharField(max_length=50, unique=True)
     email = models.EmailField()
     date_joined = models.DateTimeField("date joined", default=timezone.now)
@@ -16,6 +18,7 @@ class Player(AbstractUser):
 
 
 class Quiz(models.Model):
+    """Model of quiz"""
     name = models.CharField(max_length=100, null=False, default='')
     category = models.CharField(max_length=100, null=False, default='')
     topic = models.CharField(max_length=100, null=False, default='')
@@ -27,6 +30,7 @@ class Quiz(models.Model):
 
 
 class Question(models.Model):
+    """Model of question"""
     question_text = models.CharField(max_length=4196, null=False, default='')
     source_url = models.URLField()
     answer = models.CharField(max_length=1000, null=False, default='')

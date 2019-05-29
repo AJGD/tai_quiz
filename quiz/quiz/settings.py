@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import quiz.secret_settings as secret_settings
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -18,7 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-import quiz.secret_settings as secret_settings
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = secret_settings.SECRET_KEY
@@ -137,9 +137,10 @@ STATICFILES_DIRS = [
 
 AUTH_PROFILE_MODULE = 'quizzes.Player'
 
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '60879195003-5lqtennn4j7odgq489g3s1dco5qqccvh.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '60879195003-5lqtennn4j7odgq489g3s1dco5qqccvh.apps.' \
+                                'googleusercontent.com'
 SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = secret_settings.SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET
-SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = { 'prompt': 'select_account' }
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {'prompt': 'select_account'}
 
 LOGIN_URL = '/account/login'
 LOGIN_REDIRECT_URL = '/'

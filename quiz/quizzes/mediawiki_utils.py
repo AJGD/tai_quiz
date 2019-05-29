@@ -1,3 +1,4 @@
+"""Mediawiki utils"""
 import requests
 
 __base_url = 'http://en.wikipedia.org/w/api.php'
