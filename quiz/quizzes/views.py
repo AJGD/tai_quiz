@@ -78,6 +78,7 @@ def create_question_title(request: HttpRequest, article_id, question_id) -> Http
         'article': question.question_text,
         'title': question.answer,
         'chooser': ChooseWordToHide(),
+        'quiz_id': question.quiz.id
     }
     return render(request, 'create_question_title.html', context=context)
 

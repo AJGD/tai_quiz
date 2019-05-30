@@ -1,42 +1,62 @@
 {% extends 'base.html' %}
 
+{% block style %}
+<style type="text/css">
+
+    #user_quizzes {
+        display: inline;
+        float: right;
+    }
+    #return_button {
+        display: inline;
+        float: right;
+    }
+
+    .jumbotron {
+        background-color: khaki;
+    }
+</style>
+
+{% endblock style %}
+
 {% block navbar %}
 <ul class="nav navbar-nav navbar-right">
     {% if user.is_authenticated %}
-    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }} </p>
+    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }}
+    </p>
     {% endif %}
 </ul>
 {% endblock navbar %}
 
 {% block content %}
-<div class="container-fluid">
+<div class="container">
     <div class="jumbotron">
-        <h2>Quiz details</h2>
+        <h2><strong>Quiz details</strong></h2>
         <p> Author: <strong> {{ quiz.author }} </strong></p>
         <p> Id: <strong>{{ quiz.id }}</strong></p>
         <p> Name: <strong> {{ quiz.name }}</strong></p>
         <p> Topic: <strong> {{ quiz.topic }}</strong></p>
         <p> Description: <strong> {{ quiz.description }}</strong></p>
-        <p> Questions: <a href="{% url 'quizzes:questions' quiz_id=quiz.id %}">
-            <button type="button" class="btn btn-primary">List</button>
-        </a>
-    </div>
+        <p> Questions:
+            <a href="{% url 'quizzes:questions' quiz_id=quiz.id %}">
+                <button type="button" class="btn btn-primary">List</button>
+            </a>
+            <a href="{% url 'quizzes:create_question' quiz_id=quiz.id %}">
+                <button type="button" class="btn btn-primary">Add new</button>
+            </a>
+        </p>
+        <p>
+            <a href="{% url 'quizzes:my_quizzes' %}">
+                <button type="button" class="btn btn-default" id="user_quizzes">Quiz list
+                </button>
+            </a>
+            <a href="{% url 'quizzes:index' %}">
+                <button type="button" class="btn btn-default" id="return_button">Home page
+                </button>
+            </a>
+        </p>
 
-    <div class="jumbotron">
-
-        <div class="row">
-            <div class="col-sm-6">
-
-                <a href="{% url 'quizzes:create_question' quiz_id=quiz.id %}">
-                    <button type="button" class="btn btn-primary btn-block">Add a new question</button>
-                </a>
-            </div>
-            <div class="col-sm-6">
-                <a href="{% url 'quizzes:index' %}">
-                    <button type="button" class="btn btn-default btn-block">Return home</button>
-                </a>
-            </div>
-        </div>
     </div>
 </div>
+
 {% endblock content %}
