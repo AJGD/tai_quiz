@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
 
+{% block style %}
+<style type="text/css">
+
+    #user_quizzes {
+        display: inline;
+        float: right;
+    }
+    #add_next_question {
+        display: inline;
+        float: right;
+    }
+
+    #jumbotrone_1 {
+        background-color: khaki;
+    }
+    #jumbotrone_2 {
+        background-color: lightgreen;
+    }
+</style>
+
+{% endblock style %}
+
 {% block navbar %}
 <ul class="nav navbar-nav">
     <li><a href="{% url 'quizzes:index' %}">Home</a></li>
@@ -11,10 +33,13 @@
 </ul>
 <ul class="nav navbar-nav navbar-right">
     {% if user.is_authenticated %}
-    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }} </p>
-    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
+    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }}
+    </p>
+    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a>
+    </li>
     {% else %}
-    <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign
+        Up</a></li>
     <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
     {% endif %}
 </ul>
@@ -33,12 +58,15 @@
     </ul>
     {% endif %}
 
-    <div class="jumbotron">
+    <div class="jumbotron" id="jumbotrone_1">
 
         {% if user.is_authenticated %}
 
         <h2>
-            Write down part of the question which needs to be hidden from the player in order to make it not painfully easy. For example, if the answer is "Pizza", you should probably erase all "pizza"s from the question. Just enter the word (or phrase) and click "Replace".
+            Write down part of the question which needs to be hidden from the player in order to
+            make it not painfully easy. For example, if the answer is "Pizza", you should probably
+            erase all "pizza"s from the question. Just enter the word (or phrase) and click
+            "Replace".
         </h2>
 
         <form method="POST">
@@ -65,7 +93,7 @@
 
     </div>
 
-    <div class="jumbotron">
+    <div class="jumbotron" id="jumbotrone_2">
 
         {% if user.is_authenticated %}
 
@@ -73,9 +101,18 @@
 
         <p> Title: {{ title }} </p>
 
-        <div class="jumbotron">
+        <div>
             {{ article }}
         </div>
+
+        <a href="{% url 'quizzes:questions' quiz_id=quiz_id %}">
+            <button type="button" class="btn btn-default" id="user_quizzes">Questions list
+            </button>
+        </a>
+        <a href="{% url 'quizzes:create_question' quiz_id=quiz_id %}">
+            <button type="button" class="btn btn-default" id="add_next_question">Add next question
+            </button>
+        </a>
 
         {% endif %}
 
