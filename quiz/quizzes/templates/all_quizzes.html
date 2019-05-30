@@ -11,10 +11,13 @@
 </ul>
 <ul class="nav navbar-nav navbar-right">
     {% if user.is_authenticated %}
-    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }} </p>
-    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
+    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }}
+    </p>
+    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a>
+    </li>
     {% else %}
-    <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign
+        Up</a></li>
     <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
     {% endif %}
 </ul>
@@ -24,7 +27,8 @@
 <div class="container-fluid">
     <div class="jumbotron">
         <h2>Choose the quiz you want to play</h2>
-        <p>Quizzes created by you can only be edited. If you want to try playing them, log out first.</p>
+        <p>Quizzes created by you can only be edited. If you want to try playing them, log out
+            first.</p>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -48,9 +52,11 @@
                 <td> {{ quiz.description }}</td>
                 <td>
                     {% if quiz.author.username == request.user.username %}
-                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Edit</a>
+                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default"
+                       role="button">Edit</a>
                     {% else %}
-                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Play</a>
+                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default"
+                       role="button">Play</a>
                     {% endif %}
                 </td>
 

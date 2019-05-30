@@ -3,7 +3,8 @@
 {% block navbar %}
 <ul class="nav navbar-nav navbar-right">
     {% if user.is_authenticated %}
-    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }} </p>
+    <p class="navbar-text"><span class=" glyphicon glyphicon-user"></span> {{ user.get_username }}
+    </p>
     {% endif %}
 </ul>
 {% endblock navbar %}
@@ -19,9 +20,16 @@
         <p> Description: <strong> {{ quiz.description }}</strong></p>
     </div>
     <div class="jumbotron">
-        <a href="{% url 'quizzes:solve_quiz' quiz_id=quiz.id %}"><button type="button" class="btn btn-primary btn-block">Solve quiz</button></a>
+
+        <a href="{% url 'quizzes:solve_quiz' quiz_id=quiz.id %}">
+            <button type="button" class="btn btn-primary btn-block" {% if not any_questions %}
+                    disabled {% endif %}>Solve quiz
+            </button>
+        </a>
         <p></p>
-        <a href="{% url 'quizzes:index' %}"><button type="button" class="btn btn-default btn-block">Return home</button></a>
+        <a href="{% url 'quizzes:index' %}">
+            <button type="button" class="btn btn-default btn-block">Return home</button>
+        </a>
     </div>
 </div>
 {% endblock content %}
