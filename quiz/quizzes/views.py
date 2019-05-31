@@ -149,7 +149,8 @@ def open_quiz(request, quiz_id):
     quiz = Quiz.objects.get(pk=quiz_id)  # type: ignore
     if request.user.is_authenticated and (quiz.author.id == request.user.id):
         return render(request, 'quiz_edit_page.html', context={'quiz': quiz})
-    return render(request, 'quiz_start_page.html', context={'quiz': quiz})
+    return render(request, 'quiz_start_page.html',
+                  context={'quiz': quiz, 'any_questions': bool(Question.objects.filter(quiz=quiz))})
 
 
 def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
