@@ -1,24 +1,5 @@
 {% extends 'base.html' %}
 
-{% block style %}
-<style type="text/css">
-
-    #user_quizzes {
-        display: inline;
-        float: right;
-    }
-    #return_button {
-        display: inline;
-        float: right;
-    }
-
-    .jumbotron {
-        background-color: khaki;
-    }
-</style>
-
-{% endblock style %}
-
 {% block navbar %}
 <ul class="nav navbar-nav navbar-right">
     {% if user.is_authenticated %}
