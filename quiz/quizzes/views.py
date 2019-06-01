@@ -65,7 +65,7 @@ def create_question_title(request: HttpRequest, article_id, question_id) -> Http
         form = ChooseWordToHide(request.POST)
         if form.is_valid():
             word = form.cleaned_data['word']
-            question.question_text = question.question_text.replace(word, "####")
+            question.question_text = question.question_text.replace(word, len(word)*"_")
             question.type = 'Title'
             question.article_id = article_id
             question.save()
