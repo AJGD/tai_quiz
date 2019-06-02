@@ -29,37 +29,56 @@
         <h2>Choose the quiz you want to play</h2>
         <p>Quizzes created by you can only be edited. If you want to try playing them, log out
             first.</p>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Author</th>
-                <th>Category</th>
-                <th>Topic</th>
-                <th>Description</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tr>
-                {% for quiz in quizzes %}
-            <tr>
-                <td> {{ quiz.id }}</td>
-                <td> {{ quiz.name }}</td>
-                <td> {{ quiz.author.username }}</td>
-                <td> {{ quiz.category }}</td>
-                <td> {{ quiz.topic }}</td>
-                <td> {{ quiz.description }}</td>
-                <td>
-                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default"
-                       role="button">Play</a>
-                </td>
 
-            </tr>
-            {% endfor %}
-            </tr>
-        </table>
+        <form name="form" method="POST">
+            <input type="submit" value="Filter"/>
+            {% csrf_token %}
+            <table class="table table-striped">
 
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Category</th>
+                    <th>Topic</th>
+                    <th>Description</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td></td>
+                    {% for field in form %}
+                    <td>{{ field }}
+                        {% for error in field.errors %}
+                        <p class="help-block">{{ error }}</p>
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    {% for quiz in quizzes %}
+                <tr>
+                    <td> {{ quiz.id }}</td>
+                    <td> {{ quiz.name }}</td>
+                    <td> {{ quiz.author.username }}</td>
+                    <td> {{ quiz.category }}</td>
+                    <td> {{ quiz.topic }}</td>
+                    <td> {{ quiz.description }}</td>
+                    <td>
+                        <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default"
+                           role="button">Play</a>
+                    </td>
+
+                </tr>
+                {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
 </div>
 {% endblock content %}
