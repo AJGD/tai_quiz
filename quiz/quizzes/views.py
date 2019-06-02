@@ -137,10 +137,15 @@ def list_player_quizzes(request: HttpRequest) -> HttpResponse:
 
 
 def choose_quiz_to_play(request: HttpRequest) -> HttpResponse:
-    """Render the all quizzes created by all users page"""
-    context = {
-        'quizzes': Quiz.objects.all()  # type: ignore
-    }
+    """Render the all quizzes created by all users page exclude this logged in"""
+    if request.user.is_authenticated:  # type: ignore
+        context = {
+            'quizzes': Quiz.objects.exclude(author=request.user)  # type: ignore
+        }
+    else:
+        context = {
+            'quizzes': Quiz.objects.all()  # type: ignore
+        }
     return render(request, 'all_quizzes.html', context=context)
 
 
