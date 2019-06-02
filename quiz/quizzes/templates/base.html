@@ -9,7 +9,88 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
     {% block style %}
-    {% endblock style %}
+<style type="text/css">
+
+    #user_quizzes {
+        display: inline;
+        float: right;
+    }
+    #return_button {
+        display: inline;
+        float: right;
+    }
+
+    .jumbotron {
+        background-color: #99b28a;
+    }
+
+    .well {
+        background-color: #99b28a;
+    }
+
+    .navbar {
+       background-color: #0b1c26;
+    }
+
+    .navbar-header .navbar-brand {
+    color: #f0e68c;
+    }
+
+    .nav.navbar-nav li a {
+       color: #f0e68c;
+    }
+
+     .nav.navbar-nav p {
+       color: #f0e68c;
+    }
+
+    .nav.navbar-nav li a:hover {
+       color: #fff69c;
+    }
+
+     .nav.navbar-nav .active a {
+       color: #fff9cc;
+    }
+
+    .btn-primary {
+       background-color: #346F79;
+    }
+
+    .btn-primary:hover {
+       background-color: #448F89;
+    }
+
+     .btn-default {
+       background-color: #e4f4da;
+    }
+
+    .btn-default:hover {
+       background-color: #e9f9df;
+    }
+
+    body {
+       background-color: #245F59;
+    }
+
+    table {
+        background-color: #c9e2aa;
+    }
+
+     tr:nth-child(even) {
+        background-color: lightgreen;
+     }
+
+    button {
+        background-color: #c9d9bf;
+     }
+
+     a {
+        color: #0010bf;
+     }
+
+</style>
+
+{% endblock style %}
 </head>
 <body>
 {% load static %}
