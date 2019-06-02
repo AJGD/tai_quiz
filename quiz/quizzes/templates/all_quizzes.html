@@ -51,13 +51,8 @@
                 <td> {{ quiz.topic }}</td>
                 <td> {{ quiz.description }}</td>
                 <td>
-                    {% if quiz.author.username == request.user.username %}
-                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default"
-                       role="button">Edit</a>
-                    {% else %}
                     <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default"
                        role="button">Play</a>
-                    {% endif %}
                 </td>
 
             </tr>
