@@ -90,7 +90,8 @@ class EnterTitleGuess(forms.Form):
 class FilterQuizForm(forms.ModelForm):
     """ form to create quiz"""
     name = forms.CharField(max_length=50, required=False)
-    author = forms.ModelChoiceField(queryset=Player.objects.all(), to_field_name='id',
+    author = forms.ModelChoiceField(queryset=Player.objects.all(), # type: ignore
+                                    to_field_name='id',
                                     required=False)
     category = forms.TypedChoiceField(choices=general_categories, required=False, initial="ALL")
     topic = forms.CharField(max_length=50, required=False)

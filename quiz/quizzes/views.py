@@ -137,10 +137,10 @@ def list_player_quizzes(request: HttpRequest) -> HttpResponse:
     return render(request, 'user_quizzes.html', context)
 
 
-def choose_quiz_to_play(request: HttpRequest) -> HttpResponse:
+def choose_quiz_to_play(request):
     """Render the all quizzes created by all users page exclude this logged in"""
     context = {'form': FilterQuizForm()}
-    quizzes = Quiz.objects.all()
+    quizzes = Quiz.objects.all() # type: ignore
     if request.method == 'POST':
         form = FilterQuizForm(request.POST)
         if form.is_valid():
