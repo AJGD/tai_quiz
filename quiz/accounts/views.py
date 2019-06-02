@@ -9,6 +9,10 @@ from quizzes.models import Player
 
 
 class CustomUserCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(UserCreationForm, self).__init__(*args, **kwargs)
+        self.fields["password2"].help_text = None
+
     class Meta(UserCreationForm.Meta):  # type: ignore
         model = Player
         fields = UserCreationForm.Meta.fields  # type: ignore

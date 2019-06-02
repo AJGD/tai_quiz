@@ -22,11 +22,12 @@
 
 {% block content %}
 <div class="container">
-    <div class="jumbotron">
-        <h2>Sign up</h2>
+    <div class="jumbotron" style="text-align:center">
+        <h2><strong>Sign up</strong></h2>
+        <br/>
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
+            {{ form.as_p}}
             <button type="submit">Sign up</button>
         </form>
         <br/>
