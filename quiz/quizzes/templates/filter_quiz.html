@@ -1,0 +1,31 @@
+<form name="form" method="POST">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>Name</th>
+            {% if not own %}
+            <th>Author</th>
+            {% endif %}
+            <th>Category</th>
+            <th>Topic</th>
+            <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ form.name }}</td>
+            {% if not own %}
+            <td>{{ form.author }}</td>
+            {% endif %}
+            <td>{{ form.category }}</td>
+            <td>{{ form.topic }}</td>
+            <td>
+                <input class="btn btn-primary" type="submit" value="Filter"/>
+            </td>
+            <td></td>
+        </tr>
+        </tbody>
+        {% csrf_token %}
+    </table>
+
+</form>
