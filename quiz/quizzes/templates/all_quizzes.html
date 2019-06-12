@@ -29,6 +29,9 @@
         <h2>Choose the quiz you want to play</h2>
         <p>Quizzes created by you can only be edited. If you want to try playing them, log out
             first.</p>
+
+        {% include "filter_quiz.html" %}
+
         <table class="table table-striped">
             <thead>
             <tr>
@@ -41,6 +44,8 @@
                 <th></th>
             </tr>
             </thead>
+            <tbody>
+
             <tr>
                 {% for quiz in quizzes %}
             <tr>
@@ -58,8 +63,8 @@
             </tr>
             {% endfor %}
             </tr>
+            </tbody>
         </table>
-
     </div>
 </div>
 {% endblock content %}

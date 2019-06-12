@@ -26,6 +26,7 @@
 
         {% if user.is_authenticated %}
         <h2>Quizzes created by user</h2>
+        {% include "filter_quiz.html" %}
         <table class="table table-striped">
             <thead>
             <tr>

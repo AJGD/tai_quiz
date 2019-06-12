@@ -1,7 +1,7 @@
 """Forms"""
 from django import forms
 
-from .models import Question, Quiz
+from .models import Question, Quiz, Player
 
 categories = (
     ('ACTORS', 'ACTORS'), ('AFRICA', 'AFRICA'), ('AMERICA', 'AMERICA'), ('ANATOMY', 'ANATOMY'),
@@ -44,6 +44,8 @@ categories = (
     ('OTHER', 'OTHER')
 )
 
+general_categories = categories + (('ALL', 'ALL_CATEGORIES'),)
+
 
 class CreateQuizForm(forms.ModelForm):
     """ form to create quiz"""
@@ -83,3 +85,17 @@ class EnterTitleGuess(forms.Form):
     def __init__(self, *args, **kwargs):
         super(EnterTitleGuess, self).__init__(*args, **kwargs)
         self.fields['Title'] = forms.CharField(max_length=200)
+
+
+class FilterQuizForm(forms.ModelForm):
+    """ form to filter quiz"""
+    name = forms.CharField(max_length=50, required=False)
+    author = forms.ModelChoiceField(queryset=Player.objects.all(),  # type: ignore
+                                    to_field_name='id',
+                                    required=False)
+    category = forms.TypedChoiceField(choices=general_categories, required=False, initial="ALL")
+    topic = forms.CharField(max_length=50, required=False)
+
+    class Meta:
+        model = Quiz
+        fields = ['name', 'author', 'category', 'topic']

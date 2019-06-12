@@ -1,11 +1,12 @@
 """Quizzes views"""
 from django import forms
 from django.contrib import messages
+from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
 from .forms import CreateQuizForm, CreateQuestionForm, ChooseArticleForm, ChooseWordToHide, \
-    EnterTitleGuess
+    EnterTitleGuess, FilterQuizForm
 from .mediawiki_utils import find_article, find_articles_list
 from .models import Player, Quiz, Question
 
@@ -65,7 +66,7 @@ def create_question_title(request: HttpRequest, article_id, question_id) -> Http
         form = ChooseWordToHide(request.POST)
         if form.is_valid():
             word = form.cleaned_data['word']
-            question.question_text = question.question_text.replace(word, len(word)*"_ ")
+            question.question_text = question.question_text.replace(word, len(word) * "_ ")
             question.type = 'Title'
             question.article_id = article_id
             question.save()
@@ -128,25 +129,43 @@ def create_question_type_statistics(request: HttpRequest) -> HttpResponse:
 
 def list_player_quizzes(request: HttpRequest) -> HttpResponse:
     """Render the players own created quizzes page"""
-    context: dict = {}
+    context = {'form': FilterQuizForm(), 'own': True}
+    quizzes = Quiz.objects.all()  # type: ignore
+    if request.method == 'POST':
+        form = FilterQuizForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['author']:
+                quizzes = quizzes.filter(author=form.cleaned_data['author'])
+            if form.cleaned_data['category'] and form.cleaned_data['category'] != "ALL":
+                quizzes = quizzes.filter(category=form.cleaned_data['category'])
+            if form.cleaned_data['topic']:
+                quizzes = quizzes.filter(topic=form.cleaned_data['topic'])
     if request.user.is_authenticated:  # type: ignore
         user = Player.objects.get(id=request.user.id)  # type: ignore
-        context = {
-            'quizzes': Quiz.objects.filter(author=user)  # type: ignore
-        }
+        quizzes = quizzes.filter(author=user)  # type: ignore
+    context['quizzes'] = quizzes
     return render(request, 'user_quizzes.html', context)
 
 
-def choose_quiz_to_play(request: HttpRequest) -> HttpResponse:
+def choose_quiz_to_play(request):
     """Render the all quizzes created by all users page exclude this logged in"""
-    if request.user.is_authenticated:  # type: ignore
-        context = {
-            'quizzes': Quiz.objects.exclude(author=request.user)  # type: ignore
-        }
+    context = {'form': FilterQuizForm()}
+    quizzes = Quiz.objects.all()  # type: ignore
+    if request.method == 'POST':
+        form = FilterQuizForm(request.POST)
+        if form.is_valid():
+            if form.cleaned_data['name']:
+                quizzes = quizzes.filter(name=form.cleaned_data['name'])
+            if form.cleaned_data['author']:
+                quizzes = quizzes.filter(author=form.cleaned_data['author'])
+            if form.cleaned_data['category'] and form.cleaned_data['category'] != "ALL":
+                quizzes = quizzes.filter(category=form.cleaned_data['category'])
+            if form.cleaned_data['topic']:
+                quizzes = quizzes.filter(topic=form.cleaned_data['topic'])
+    if request.user.is_authenticated:
+        context['quizzes'] = quizzes.exclude(author=request.user)  # type: ignore
     else:
-        context = {
-            'quizzes': Quiz.objects.all()  # type: ignore
-        }
+        context['quizzes'] = quizzes
     return render(request, 'all_quizzes.html', context=context)
 
 
