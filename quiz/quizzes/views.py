@@ -1,4 +1,6 @@
 """Quizzes views"""
+from difflib import SequenceMatcher
+
 from django import forms
 from django.contrib import messages
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
@@ -113,10 +115,9 @@ def solve_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
             for form in formset:
                 questions_number += 1
                 cleaned_data = form.cleaned_data
-                if form.initial.get('question').answer == cleaned_data.get('Title'):
-                    score += 1
+                score = add_score_for_question(cleaned_data, form, score)
             return render(request, 'quiz_results.html',
-                          context={'result': 100 * (score / questions_number)})
+                          context={'result': '%.2f' % (100 * score / questions_number)})
     formset = enter_title_guess_form_set(initial=[{'question': question} for question in questions])
     return render(request, 'solve_quiz.html', context={'formset': formset})
 
@@ -129,3 +130,10 @@ def delete_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
         messages.success(request, 'Quiz deleted successfully.')  # type: ignore
         return redirect('quizzes:my_quizzes')
     return render(request, 'no_permission_error.html')
+
+
+def add_score_for_question(cleaned_data, form, score):
+    correct_answer = form.initial.get('question').answer.lower()
+    user_answer = cleaned_data.get('Title').lower()
+    score += SequenceMatcher(None, correct_answer, user_answer).ratio()
+    return score
