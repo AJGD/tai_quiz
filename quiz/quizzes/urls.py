@@ -18,7 +18,10 @@ urlpatterns = [
          name='choose_question_type'),
     path('quizzes/', views.choose_quiz_to_play, name='quizzes'),
     path('quizzes/<int:quiz_id>/', views.open_quiz, name='quiz'),
+    path('quizzes/<int:quiz_id>/delete', views.delete_quiz, name='delete_quiz'),
     path('quizzes/<int:quiz_id>/solve', views.solve_quiz, name='solve_quiz'),
     path('quizzes/<int:quiz_id>/questions', views.list_questions, name='questions'),
+    path('quizzes/<int:quiz_id>/questions/<int:question_id>/delete',
+         views.delete_question, name='delete_question'),
     path('my_quizzes/', views.list_player_quizzes, name='my_quizzes'),
 ]

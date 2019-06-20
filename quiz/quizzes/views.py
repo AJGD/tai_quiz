@@ -1,7 +1,6 @@
 """Quizzes views"""
 from django import forms
 from django.contrib import messages
-from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
@@ -208,3 +207,23 @@ def solve_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
                           context={'result': 100 * (score / questions_number)})
     formset = enter_title_guess_form_set(initial=[{'question': question} for question in questions])
     return render(request, 'solve_quiz.html', context={'formset': formset})
+
+
+def delete_question(request: HttpRequest, quiz_id, question_id) -> HttpResponse:
+    """Delete the question specified by question_id."""
+    author_id = Quiz.objects.get(id=quiz_id).author.id  # type: ignore
+    if request.user.is_authenticated and (author_id == request.user.id):  # type: ignore
+        Question.objects.filter(id=question_id).delete()  # type: ignore
+        messages.success(request, 'Question deleted successfully.')  # type: ignore
+        return redirect('quizzes:questions', quiz_id=quiz_id)
+    return render(request, 'no_permission_error.html')
+
+
+def delete_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
+    """Delete the quiz specified by quiz_id."""
+    author_id = Quiz.objects.get(id=quiz_id).author.id  # type: ignore
+    if request.user.is_authenticated and (author_id == request.user.id):  # type: ignore
+        Quiz.objects.filter(id=quiz_id).delete()  # type: ignore
+        messages.success(request, 'Quiz deleted successfully.')  # type: ignore
+        return redirect('quizzes:my_quizzes')
+    return render(request, 'no_permission_error.html')

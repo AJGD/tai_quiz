@@ -22,6 +22,17 @@
 
 {% block content %}
 <div class="container-fluid">
+
+    {% if messages %}
+    <ul style="color: #e4f4da;">
+        {% for message in messages %}
+        <li
+                {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
     <div class="jumbotron">
         <h2>Questions from quiz {{ quiz.name }}</h2>
         <p>Here you can edit or delete questions.</p>
@@ -34,6 +45,7 @@
                 <th>Published</th>
                 <th>Text</th>
                 <th>Edit</th>
+                <th>Delete</th>
             </tr>
             </thead>
             </tr>
@@ -48,6 +60,10 @@
                 <td>
                     <a href="{% url 'quizzes:create_question_title' article_id=question.article_id question_id=question.id %}"
                        class="btn btn-default" role="button" name="edit_button">Edit</a>
+                </td>
+                <td>
+                    <a href="{% url 'quizzes:delete_question' quiz_id=question.quiz.id question_id=question.id %}"
+                       class="btn btn-danger" role="button" name="edit_button">Delete</a>
                 </td>
 
             </tr>
