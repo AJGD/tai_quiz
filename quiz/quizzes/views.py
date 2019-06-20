@@ -155,13 +155,13 @@ def choose_quiz_to_play(request):
         form = FilterQuizForm(request.POST)
         if form.is_valid():
             if form.cleaned_data['name']:
-                quizzes = quizzes.filter(name=form.cleaned_data['name'])
+                quizzes = quizzes.filter(name__icontains=form.cleaned_data['name'])
             if form.cleaned_data['author']:
                 quizzes = quizzes.filter(author=form.cleaned_data['author'])
             if form.cleaned_data['category'] and form.cleaned_data['category'] != "ALL":
                 quizzes = quizzes.filter(category=form.cleaned_data['category'])
             if form.cleaned_data['topic']:
-                quizzes = quizzes.filter(topic=form.cleaned_data['topic'])
+                quizzes = quizzes.filter(topic__icontains=form.cleaned_data['topic'])
     if request.user.is_authenticated:
         context['quizzes'] = quizzes.exclude(author=request.user)  # type: ignore
     else:
