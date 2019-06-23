@@ -1,6 +1,8 @@
 """Quizzes views"""
 from django import forms
 from django.contrib import messages
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.db.models.query_utils import Q
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
 
@@ -129,7 +131,7 @@ def create_question_type_statistics(request: HttpRequest) -> HttpResponse:
 def list_player_quizzes(request: HttpRequest) -> HttpResponse:
     """Render the players own created quizzes page"""
     context = {'form': FilterQuizForm(), 'own': True}
-    quizzes = Quiz.objects.all()  # type: ignore
+    quizzes = Quiz.objects.all().order_by('id')  # type: ignore
     if request.method == 'POST':
         form = FilterQuizForm(request.POST)
         if form.is_valid():
@@ -142,6 +144,14 @@ def list_player_quizzes(request: HttpRequest) -> HttpResponse:
     if request.user.is_authenticated:  # type: ignore
         user = Player.objects.get(id=request.user.id)  # type: ignore
         quizzes = quizzes.filter(author=user)  # type: ignore
+    page = request.GET.get('page', 1)
+    paginator = Paginator(quizzes, 10)
+    try:
+        quizzes = paginator.page(page)
+    except PageNotAnInteger:
+        quizzes = paginator.page(1)
+    except EmptyPage:
+        quizzes = paginator.page(paginator.num_pages)  # type: ignore
     context['quizzes'] = quizzes
     return render(request, 'user_quizzes.html', context)
 
@@ -149,7 +159,7 @@ def list_player_quizzes(request: HttpRequest) -> HttpResponse:
 def choose_quiz_to_play(request):
     """Render the all quizzes created by all users page exclude this logged in"""
     context = {'form': FilterQuizForm()}
-    quizzes = Quiz.objects.all()  # type: ignore
+    quizzes = Quiz.objects.all().order_by('id')  # type: ignore
     if request.method == 'POST':
         form = FilterQuizForm(request.POST)
         if form.is_valid():
@@ -162,9 +172,18 @@ def choose_quiz_to_play(request):
             if form.cleaned_data['topic']:
                 quizzes = quizzes.filter(topic__icontains=form.cleaned_data['topic'])
     if request.user.is_authenticated:
-        context['quizzes'] = quizzes.exclude(author=request.user)  # type: ignore
+        quizzes = quizzes.exclude(author=request.user)  # type: ignore
     else:
-        context['quizzes'] = quizzes
+        quizzes = quizzes
+    page = request.GET.get('page', 1)
+    paginator = Paginator(quizzes, 10)
+    try:
+        quizzes = paginator.page(page)
+    except PageNotAnInteger:
+        quizzes = paginator.page(1)
+    except EmptyPage:
+        quizzes = paginator.page(paginator.num_pages)
+    context['quizzes'] = quizzes
     return render(request, 'all_quizzes.html', context=context)
 
 
@@ -180,8 +199,17 @@ def open_quiz(request, quiz_id):
 def list_questions(request: HttpRequest, quiz_id) -> HttpResponse:
     """Render the page of list of all questions"""
     quiz = Quiz.objects.get(id=quiz_id)  # type: ignore
+    questions = Question.objects.filter(quiz=quiz).order_by('id')  # type: ignore
+    page = request.GET.get('page', 1)
+    paginator = Paginator(questions, 10)
+    try:
+        questions = paginator.page(page)
+    except PageNotAnInteger:
+        questions = paginator.page(1)
+    except EmptyPage:
+        questions = paginator.page(paginator.num_pages)  # type: ignore
     context = {
-        'questions': Question.objects.filter(quiz=quiz),  # type: ignore
+        'questions': questions,  # type: ignore
         'quiz': quiz
     }
     return render(request, 'question_list.html', context)
