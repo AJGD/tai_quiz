@@ -22,8 +22,11 @@
     <div class="jumbotron">
 
         <a href="{% url 'quizzes:solve_quiz' quiz_id=quiz.id %}">
-            <button type="button" class="btn btn-primary btn-block" {% if not any_questions %}
-                    disabled {% endif %}>Solve quiz
+            <button type="button" class="btn btn-primary btn-block"
+                    {% if not any_questions %}
+                    disabled
+                    title="This quiz has no questions, so you cannot solve it."
+                    {% endif %}>Solve quiz
             </button>
         </a>
         <p></p>
