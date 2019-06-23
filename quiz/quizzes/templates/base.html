@@ -4,93 +4,103 @@
     <title>Quizzes</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet"
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 
     {% block style %}
-<style type="text/css">
+    <style type="text/css">
 
-    #user_quizzes {
-        display: inline;
-        float: right;
-    }
-    #return_button {
-        display: inline;
-        float: right;
-    }
+        .pagination > .active > span {
+            z-index: 3;
+            color: #fff;
+            background-color: forestgreen;
+            border-color: forestgreen;
+            cursor: default;
+        }
 
-    .jumbotron {
-        background-color: #99b28a;
-    }
+        #user_quizzes {
+            display: inline;
+            float: right;
+        }
 
-    .well {
-        background-color: #99b28a;
-    }
+        #return_button {
+            display: inline;
+            float: right;
+        }
 
-    .navbar {
-       background-color: #0b1c26;
-    }
+        .jumbotron {
+            background-color: #99b28a;
+        }
 
-    .navbar-header .navbar-brand {
-    color: #f0e68c;
-    }
+        .well {
+            background-color: #99b28a;
+        }
 
-    .nav.navbar-nav li a {
-       color: #f0e68c;
-    }
+        .navbar {
+            background-color: #0b1c26;
+        }
 
-     .nav.navbar-nav p {
-       color: #f0e68c;
-    }
+        .navbar-header .navbar-brand {
+            color: #f0e68c;
+        }
 
-    .nav.navbar-nav li a:hover {
-       color: #fff69c;
-    }
+        .nav.navbar-nav li a {
+            color: #f0e68c;
+        }
 
-     .nav.navbar-nav .active a {
-       color: #fff9cc;
-    }
+        .nav.navbar-nav p {
+            color: #f0e68c;
+        }
 
-    .btn-primary {
-       background-color: #346F79;
-    }
+        .nav.navbar-nav li a:hover {
+            color: #fff69c;
+        }
 
-    .btn-primary:hover {
-       background-color: #448F89;
-    }
+        .nav.navbar-nav .active a {
+            color: #fff9cc;
+        }
 
-     .btn-default {
-       background-color: #e4f4da;
-    }
+        .btn-primary {
+            background-color: #346F79;
+        }
 
-    .btn-default:hover {
-       background-color: #e9f9df;
-    }
+        .btn-primary:hover {
+            background-color: #448F89;
+        }
 
-    body {
-       background-color: #245F59;
-    }
+        .btn-default {
+            background-color: #e4f4da;
+        }
 
-    table {
-        background-color: #c9e2aa;
-    }
+        .btn-default:hover {
+            background-color: #e9f9df;
+        }
 
-     tr:nth-child(even) {
-        background-color: lightgreen;
-     }
+        body {
+            background-color: #245F59;
+        }
 
-    button {
-        background-color: #c9d9bf;
-     }
+        table {
+            background-color: #c9e2aa;
+        }
 
-     a {
-        color: #0010bf;
-     }
+        tr:nth-child(even) {
+            background-color: lightgreen;
+        }
 
-</style>
+        button {
+            background-color: #c9d9bf;
+        }
 
-{% endblock style %}
+        a {
+            color: #0010bf;
+        }
+
+    </style>
+
+    {% endblock style %}
 </head>
 <body>
 {% load static %}
@@ -100,7 +110,7 @@
         <div class="navbar-header">
             <a class="navbar-brand" href="{% url 'quizzes:index' %}">QUIZZES</a>
         </div>
-{% block navbar %}{% endblock navbar %}
+        {% block navbar %}{% endblock navbar %}
     </div>
 </nav>
 
