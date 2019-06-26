@@ -1,20 +1,37 @@
-"""tests for the 'accounts' app"""
-from django.test import TestCase
+"""Tests for 'accounts' - sub-application responsible for registering users"""
+from django.test import LiveServerTestCase
+from selenium import webdriver
 
 
-class SampleTestClass(TestCase):
-    """Placeholder test for the 'accounts' app."""
-    @classmethod
-    def setUpTestData(cls):
-        print("setUpTestData: Run once to set up non-modified data for all class methods.")
+class AccountTestCase(LiveServerTestCase):
+    """Testing a simple registration case that should be successful"""
 
     def setUp(self):
-        print("setUp: Run once for every test method to setup clean data.")
+        self.selenium = webdriver.Firefox()
+        super(AccountTestCase, self).setUp()
 
-    def test_false_is_false(self):
-        print("Method: test_false_is_false.")
-        self.assertFalse((lambda x: x > 0)(-1))
+    def tearDown(self):
+        self.selenium.quit()
+        super(AccountTestCase, self).tearDown()
 
-    def test_one_plus_one_equals_two(self):
-        print("Method: test_one_plus_one_equals_two.")
-        self.assertEqual(1 + 1, 2)
+    def test_register(self):
+        """test simple successful registration case"""
+        selenium = self.selenium
+        # Opening the link we want to test
+        selenium.get(self.live_server_url + '/account/signup/')
+        # find the form element
+        username = selenium.find_element_by_id('id_username')
+        password1 = selenium.find_element_by_id('id_password1')
+        password2 = selenium.find_element_by_id('id_password2')
+        submit = selenium.find_element_by_xpath('//button[text()="Sign up"]')
+
+        # Fill the form with data
+        username.send_keys('some username')
+        password1.send_keys('123456')
+        password2.send_keys('123456')
+
+        # submitting the form
+        submit.click()
+
+        # check the returned result
+        assert 'Username' in selenium.page_source
