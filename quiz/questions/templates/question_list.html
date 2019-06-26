@@ -58,11 +58,11 @@
                 <td> {{ question.published_date }}</td>
                 <td> {{ question.question_text }}</td>
                 <td>
-                    <a href="{% url 'quizzes:create_question_title' article_id=question.article_id question_id=question.id %}"
+                    <a href="{% url 'questions:create_question_title' article_id=question.article_id question_id=question.id %}"
                        class="btn btn-default" role="button" name="edit_button">Edit</a>
                 </td>
                 <td>
-                    <a href="{% url 'quizzes:delete_question' quiz_id=question.quiz.id question_id=question.id %}"
+                    <a href="{% url 'questions:delete_question' quiz_id=question.quiz.id question_id=question.id %}"
                        class="btn btn-danger" role="button" name="edit_button">Delete</a>
                 </td>
 

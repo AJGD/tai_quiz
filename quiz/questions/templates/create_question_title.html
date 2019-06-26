@@ -86,11 +86,11 @@
         <br/>
         <br/>
         <div class="text-right">
-        <a href="{% url 'quizzes:questions' quiz_id=quiz_id %}">
+        <a href="{% url 'questions:questions' quiz_id=quiz_id %}">
             <button type="button" class="btn btn-default" id="user_quizzes">Questions list
             </button>
         </a>
-        <a href="{% url 'quizzes:create_question' quiz_id=quiz_id %}">
+        <a href="{% url 'questions:create_question' quiz_id=quiz_id %}">
             <button type="button" class="btn btn-default" id="add_next_question">Add next question
             </button>
         </a>

@@ -36,6 +36,7 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 INSTALLED_APPS = [
     'quizzes.apps.QuizzesConfig',
     'accounts.apps.AccountsConfig',
+    'questions.apps.QuestionsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
