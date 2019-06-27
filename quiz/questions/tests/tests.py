@@ -1,8 +1,6 @@
 """Tests"""
-import time
 
 from django.test import LiveServerTestCase
-from django.test import TestCase
 from selenium import webdriver
 
 from quizzes.models import Quiz, Player, Question

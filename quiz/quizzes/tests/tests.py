@@ -1,11 +1,5 @@
 """Tests"""
-import time
-
-from django.contrib import auth
-from django.contrib.auth import authenticate, login
 from django.test import LiveServerTestCase
-from django.test import TestCase
-from pytest import skip
 from selenium import webdriver
 
 from quizzes.models import Quiz, Player
