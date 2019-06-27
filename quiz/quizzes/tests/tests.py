@@ -1,5 +1,7 @@
 """Tests"""
+from django.test import LiveServerTestCase
 from django.test import TestCase
+from selenium import webdriver
 
 
 class SampleTestClass(TestCase):
