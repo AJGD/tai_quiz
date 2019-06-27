@@ -19,10 +19,10 @@
         <p> Topic: <strong> {{ quiz.topic }}</strong></p>
         <p> Description: <strong> {{ quiz.description }}</strong></p>
         <p> Questions:
-            <a href="{% url 'quizzes:questions' quiz_id=quiz.id %}">
+            <a href="{% url 'questions:questions' quiz_id=quiz.id %}">
                 <button type="button" class="btn btn-primary">List</button>
             </a>
-            <a href="{% url 'quizzes:create_question' quiz_id=quiz.id %}">
+            <a href="{% url 'questions:create_question' quiz_id=quiz.id %}">
                 <button type="button" class="btn btn-primary">Add new</button>
             </a>
         </p>

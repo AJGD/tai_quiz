@@ -34,72 +34,80 @@
     {% endif %}
 
     <div class="jumbotron">
-
-        {% if user.is_authenticated %}
-        <h2>Quizzes created by user</h2>
-        {% include "filter_quiz.html" %}
+        <h2>Questions from quiz {{ quiz.name }}</h2>
+        <p>Here you can edit or delete questions.</p>
         <table class="table">
             <thead>
             <tr>
-                <th>Id</th>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Topic</th>
-                <th>Description</th>
+                <th>Type</th>
+                <th>Answer</th>
+                <th>Source</th>
+                <th>Published</th>
+                <th>Text</th>
                 <th>Edit</th>
                 <th>Delete</th>
             </tr>
             </thead>
+            </tr>
             <tr>
-                {% for quiz in quizzes %}
+                {% for question in questions %}
             <tr>
-                <td> {{ quiz.id }}</td>
-                <td> {{ quiz.name }}</td>
-                <td> {{ quiz.category }}</td>
-                <td> {{ quiz.topic }}</td>
-                <td> {{ quiz.description }}</td>
+                <td> {{ question.type }}</td>
+                <td> {{ question.answer }}</td>
+                <td> {{ question.source_url }}</td>
+                <td> {{ question.published_date }}</td>
+                <td> {{ question.question_text }}</td>
                 <td>
-                    <a href="{% url 'quizzes:quiz' quiz_id=quiz.id %}" class="btn btn-default" role="button">Edit</a>
+                    {% if question.type == "Title"%}
+                    <a href="{% url 'questions:create_question_title' article_id=question.article_id question_id=question.id %}"
+                       class="btn btn-default" role="button" name="edit_button">Edit</a>
+                    {% else %}
+                    <a href="{% url 'questions:create_question_type_stat' article_id=question.article_id question_id=question.id %}"
+                       class="btn btn-default" role="button" name="edit_button">Edit</a>
+                    {% endif %}
                 </td>
                 <td>
-                     <a href="{% url 'quizzes:delete_quiz' quiz_id=quiz.id %}"
+                    <a href="{% url 'questions:delete_question' quiz_id=question.quiz.id question_id=question.id %}"
                        class="btn btn-danger" role="button" name="edit_button">Delete</a>
                 </td>
+
             </tr>
             {% endfor %}
             </tr>
         </table>
 
         <ul class="pagination">
-            {% if quizzes.has_previous %}
+            {% if questions.has_previous %}
             <li><a href="?page={{ quizzes.previous_page_number }}">&laquo;</a></li>
             {% else %}
             <li class="disabled"><span>&laquo;</span></li>
             {% endif %}
-            {% for i in quizzes.paginator.page_range %}
-            {% if quizzes.number == i %}
+            {% for i in questions.paginator.page_range %}
+            {% if questions.number == i %}
             <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
             {% else %}
             <li><a href="?page={{ i }}">{{ i }}</a></li>
             {% endif %}
             {% endfor %}
-            {% if quizzes.has_next %}
+            {% if questions.has_next %}
             <li><a href="?page={{ quizzes.next_page_number }}">&raquo;</a></li>
             {% else %}
             <li class="disabled"><span>&raquo;</span></li>
             {% endif %}
         </ul>
-        {% else %}
-        <div class="container">
-            <div class="alert alert-danger">
-                This page is available only for logged users.
-            </div>
-            <div class="text-center">
-                <h1 class="glyphicon glyphicon-lock"></h1>
-            </div>
-        </div>
-        {% endif %}
 
+        <br/>
+        <br/>
+        <div class="text-right">
+        <a href="{% url 'questions:questions' quiz_id=quiz.id %}">
+            <button type="button" class="btn btn-default" id="user_quizzes">Questions list
+            </button>
+        </a>
+        <a href="{% url 'questions:create_question' quiz_id=quiz.id %}">
+            <button type="button" class="btn btn-default" id="add_next_question">Add next question
+            </button>
+        </a>
+        </div>
 
     </div>
 </div>

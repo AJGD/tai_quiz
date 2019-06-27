@@ -21,6 +21,7 @@ from django.views.generic import RedirectView
 urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url=settings.STATIC_URL + 'favicon.ico')),
     path('', include('quizzes.urls')),
+    path('', include('questions.urls', namespace='questions')),
     path('admin/', admin.site.urls),
     path('account/', include('accounts.urls', namespace='accounts')),
     path('account/', include('django.contrib.auth.urls')),

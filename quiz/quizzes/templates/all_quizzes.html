@@ -65,6 +65,26 @@
             </tr>
             </tbody>
         </table>
+
+        <ul class="pagination">
+            {% if quizzes.has_previous %}
+            <li><a href="?page={{ quizzes.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in quizzes.paginator.page_range %}
+            {% if quizzes.number == i %}
+            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+            {% else %}
+            <li><a href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if quizzes.has_next %}
+            <li><a href="?page={{ quizzes.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="disabled"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
     </div>
 </div>
 {% endblock content %}

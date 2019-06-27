@@ -27,7 +27,8 @@ SECRET_KEY = secret_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['quizzes.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['quizzes.pythonanywhere.com', 'tai-quiz.herokuapp.com',
+                 '127.0.0.1', '192.168.99.100']
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 
@@ -36,6 +37,7 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 INSTALLED_APPS = [
     'quizzes.apps.QuizzesConfig',
     'accounts.apps.AccountsConfig',
+    'questions.apps.QuestionsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'bootstrap_datepicker_plus',
 ]
 
 MIDDLEWARE = [
@@ -150,3 +153,5 @@ LOGOUT_REDIRECT_URL = '/'
 MEDIA_URL = '/media/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'assets')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
