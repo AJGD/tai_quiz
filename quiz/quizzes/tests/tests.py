@@ -1,8 +1,11 @@
 """Tests"""
 import time
 
+from django.contrib import auth
+from django.contrib.auth import authenticate, login
 from django.test import LiveServerTestCase
 from django.test import TestCase
+from pytest import skip
 from selenium import webdriver
 
 from quizzes.models import Quiz, Player
@@ -129,5 +132,57 @@ class FilterTestClass(LiveServerTestCase):
         submit.click()
 
         # check the returned result
-        assert selenium.page_source.count(inserted_topic) + selenium.page_source\
+        assert selenium.page_source.count(inserted_topic) + selenium.page_source \
             .count(inserted_author) >= amount
+
+
+class CreateLinkTestClass(LiveServerTestCase):
+    """Check if home page create link exists for not logged in user"""
+
+    def setUp(self):
+        self.selenium = webdriver.Firefox()
+
+    def tearDown(self):
+        self.selenium.quit()
+
+    def test_link(self):
+        """test existing of link"""
+        selenium = self.selenium
+        # Opening the link we want to test
+        selenium.get(self.live_server_url)
+
+        # check the returned result
+        assert selenium.page_source.count("Logout") == 0
+
+
+class CreateLinkForLoggedTestClass(LiveServerTestCase):
+    """Check if home page create link exists for logged user"""
+
+    def setUp(self):
+        self.selenium = webdriver.Firefox()
+        self.player = Player.objects.create(username="Bobby", password="Zachannasian")
+
+    def tearDown(self):
+        self.selenium.quit()
+
+    def test_link(self):
+        """test existing the link"""
+        selenium = self.selenium
+
+        selenium.get(self.live_server_url + '/account/login')
+        username = selenium.find_element_by_id('id_username')
+        password = selenium.find_element_by_id('id_password')
+        submit = selenium.find_element_by_xpath('//button[text()="Login"]')
+
+        # Fill the form with data
+        username.send_keys('Bobby')
+        password.send_keys('Zachannasian')
+
+        # submitting the form
+        submit.click()
+
+        print(selenium.current_url)
+        selenium.get(self.live_server_url)
+        print(selenium.current_url)
+
+        assert selenium.page_source.count("Logout") != 0

@@ -44,8 +44,6 @@ class EditButtonClass(LiveServerTestCase):
         """test button redirection to title question"""
         selenium = self.selenium
         # Opening the link we want to test
-        inserted_text = "Cinema"
-        amount = len(Quiz.objects.filter(name=inserted_text))
         selenium.get(self.live_server_url + '/quizzes/' + str(self.quiz.id) + '/questions')
         # find the form element
         submit = selenium.find_element_by_id("title_button_" + str(self.question_title.id))
@@ -61,8 +59,6 @@ class EditButtonClass(LiveServerTestCase):
         """test button redirection to statistics question"""
         selenium = self.selenium
         # Opening the link we want to test
-        inserted_text = "Cinema"
-        amount = len(Quiz.objects.filter(name=inserted_text))
         selenium.get(self.live_server_url + '/quizzes/' + str(self.quiz.id) + '/questions')
         # find the form element
         submit = selenium.find_element_by_id("stat_button_" + str(self.question_stats.id))
