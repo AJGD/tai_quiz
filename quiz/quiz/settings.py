@@ -27,7 +27,8 @@ SECRET_KEY = secret_settings.SECRET_KEY
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['quizzes.pythonanywhere.com', '127.0.0.1']
+ALLOWED_HOSTS = ['quizzes.pythonanywhere.com', 'tai-quiz.herokuapp.com',
+                 '127.0.0.1', '192.168.99.100']
 
 PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 

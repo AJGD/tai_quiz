@@ -14,8 +14,9 @@ install:
 
 jobs:
   include:
-    - name: "tests"
-      script: "cd quiz && python manage.py test accounts.tests quizzes.tests"
+# Currently the only tests we have are UI tests that work only locally
+#    - name: "tests"
+#      script: "cd quiz && python manage.py test accounts.tests quizzes.tests"
     - name: "linter"
       script: "cd quiz && pylint quiz quizzes questions accounts"
     - name: "type analysis"
