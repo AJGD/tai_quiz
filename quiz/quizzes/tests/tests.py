@@ -2,7 +2,7 @@
 from django.test import LiveServerTestCase
 from selenium import webdriver
 
-from quizzes.models import Quiz, Player
+from quizzes.models import Quiz, Player, Question
 
 
 class FilterTestClass(LiveServerTestCase):
@@ -10,7 +10,7 @@ class FilterTestClass(LiveServerTestCase):
 
     def setUp(self):
         self.selenium = webdriver.Firefox()
-        self.player = Player.objects.create(username="Bobby")
+        self.player = Player.objects.create(username="Tobby")
         Quiz.objects.create(
             name="Cinema",
             author=self.player,
@@ -44,7 +44,7 @@ class FilterTestClass(LiveServerTestCase):
     def test_author_filter_page(self):
         """test filtering by author"""
         selenium = self.selenium
-        inserted_text = 'Bobby'
+        inserted_text = 'Tobby'
         # Opening the link we want to test
         player = Player.objects.get(username=inserted_text)
         amount = len(Quiz.objects.filter(author=player))
@@ -106,7 +106,7 @@ class FilterTestClass(LiveServerTestCase):
         """test filtering by topic"""
         selenium = self.selenium
         inserted_topic = 'Spain'
-        inserted_author = 'Bobby'
+        inserted_author = 'Tobby'
         # Opening the link we want to test
         player = Player.objects.get(username=inserted_author)
         # find the form element
@@ -186,3 +186,53 @@ class CreateLinkForLoggedTestClass(LiveServerTestCase):
         selenium.get(self.live_server_url)
 
         assert selenium.page_source.count("Logout") != 0
+
+
+class SolveTestClass(LiveServerTestCase):
+    """Solving quiz Test"""
+
+    def setUp(self):
+        self.selenium = webdriver.Firefox()
+        self.player = Player.objects.create(username="Mobby")
+        self.quiz = Quiz.objects.create(
+            name="Cinema",
+            author=self.player,
+            category='TRAVEL',
+            topic='Spain'
+        )
+        self.question_title = Question.objects.create(
+            question_text="_ _ _ _ _ _ _ _ _ pochodza z ziemi",
+            answer="Ziemniak",
+            author=self.player,
+            quiz=self.quiz,
+            article_id=1213,
+            type="Title"
+        )
+        self.question_stats = Question.objects.create(
+            question_text="How many times was the article 'Purée' viewed in the month of 2019-5?",
+            answer="1000",
+            author=self.player,
+            quiz=self.quiz,
+            article_id=1214,
+            type="Stats"
+        )
+
+    def tearDown(self):
+        self.selenium.quit()
+
+    def test_quiz_solving(self):
+        """test solving quiz"""
+        selenium = self.selenium
+
+        selenium.get(self.live_server_url + '/quizzes/' + str(self.quiz.id) + '/solve')
+
+        question1 = selenium.find_element_by_id("id_form-0-Answer")
+        question2 = selenium.find_element_by_id("id_form-1-Answer")
+        submit = selenium.find_element_by_id("Submit")
+
+        question1.send_keys("Zimniok")
+        question2.send_keys("1000")
+
+        submit.click()
+
+        assert selenium.page_source.count("Your result for this quiz:") != 0
