@@ -72,32 +72,44 @@ def initialize_question(article_id, question):
 
 def create_question_type_statistics(request: HttpRequest, article_id, question_id) -> HttpResponse:
     """Render the create question page type statistics"""
-    question = Question.objects.get(pk=question_id)
-    if question.quiz.author != request.user.id:
+    question = Question.objects.get(pk=question_id)  # type: ignore
+    if question.quiz.author != request.user.id:  # type: ignore
         render(request, 'default_error.html')
-    found_article = get_article_and_views(article_id)
-    if question.source_url == '':
-        question.source_url = found_article[2]
     if request.method == 'POST':
         form = EnterMonthAndYearForm(request.POST)
         if form.is_valid():
-            question.question_text = 'How many times was the article "' + found_article[
-                0] + '" viewed in the month of ' + str(form.cleaned_data['date']) + "?"
-            question.type = 'Statistic'
-            question.article_id = article_id
+            found_date = form.cleaned_data['date']
+            found_article = get_article_and_views(article_id,
+                                                  year=found_date.year, month=found_date.month)
+            fill_stat_type_question(article_id, found_article, found_date, question)
             question.save()
-            redirect('questions:create_question_type_stat', article_id=article_id, question_id=question_id)
+            redirect('questions:create_question_type_stat',
+                     article_id=article_id, question_id=question_id)
         else:
             print(form.errors)
             return render(request, 'default_error.html')
     context = {
         'article_id': article_id,
         'article': question.question_text,
-        'title': found_article[0],
+        'title': find_article(article_id)[1],
         'form': EnterMonthAndYearForm(),
         'quiz': question.quiz,
     }
     return render(request, 'create_question_statistics.html', context=context)
+
+
+def fill_stat_type_question(article_id, found_article, found_date, question):
+    """Given an article, a date and some already gathered data, fill the details
+    of a statistics-type question"""
+    if question.source_url == '':
+        question.source_url = found_article[2]
+    question.question_text = \
+        'How many times was the article "' \
+        + found_article[0] + '" viewed in the month of ' \
+        + str(found_date.year) + "-" + str(found_date.month) + "?"
+    question.type = 'Statistic'
+    question.article_id = article_id
+    question.answer = found_article[1]
 
 
 def choose_question_type(request: HttpRequest, article_id, question_id) -> HttpResponse:

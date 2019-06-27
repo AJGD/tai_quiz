@@ -19,4 +19,4 @@ jobs:
     - name: "linter"
       script: "cd quiz && pylint quiz quizzes questions accounts"
     - name: "type analysis"
-      script: "cd quiz && mypy quiz quizzes questions accounts"
+      script: "cd quiz && mypy quiz quizzes questions accounts --ignore-missing-imports"

@@ -42,10 +42,12 @@ def find_articles_list(key_word):
     return result
 
 
-def get_article_and_views(pageid):
+def get_article_and_views(pageid, year, month):
+    """Find views per month of given article"""
     _, title, source_url = find_article(pageid)
     request_url = __pageviews_url + "per-article/en.wikipedia/all-access/all-agents/" \
-                  + title + "/monthly/2016010100/2016020100"
+                  + title + "/monthly/" + str(year) + str(month).zfill(2) + "0100/" \
+                  + str(year) + str(month + 1).zfill(2) + "0100"
     resp = requests.get(request_url)
     data = resp.json()['items'][0]
     return title, data['views'], source_url

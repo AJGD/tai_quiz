@@ -133,7 +133,19 @@ def delete_quiz(request: HttpRequest, quiz_id) -> HttpResponse:
 
 
 def add_score_for_question(cleaned_data, form, score):
+    """increase score by a value in [0,1] depending on how 'close'
+    given answer is to the original"""
     correct_answer = form.initial.get('question').answer.lower()
-    user_answer = cleaned_data.get('Title').lower()
-    score += SequenceMatcher(None, correct_answer, user_answer).ratio()
+    user_answer = cleaned_data.get('Answer').lower()
+    if form.initial.get('question').type == 'Title':
+        score += SequenceMatcher(None, correct_answer, user_answer).ratio()
+    else:
+        try:
+            correct_answer = float(correct_answer)
+            user_answer = float(user_answer)
+            if user_answer > 2 * correct_answer or user_answer < 0.5 * correct_answer:
+                return score
+            score += 1 - (abs(correct_answer - user_answer) / correct_answer)
+        except (ValueError, ZeroDivisionError) as _:
+            pass  # can't be correct => zero score
     return score
