@@ -60,10 +60,10 @@
                 <td>
                     {% if question.type == "Title"%}
                     <a href="{% url 'questions:create_question_title' article_id=question.article_id question_id=question.id %}"
-                       class="btn btn-default" role="button" name="edit_button">Edit</a>
+                       class="btn btn-default" role="button" name="edit_button" id="title_button_{{ question.id }}">Edit</a>
                     {% else %}
                     <a href="{% url 'questions:create_question_type_stat' article_id=question.article_id question_id=question.id %}"
-                       class="btn btn-default" role="button" name="edit_button">Edit</a>
+                       class="btn btn-default" role="button" name="edit_button" id="stat_button_{{ question.id }}">Edit</a>
                     {% endif %}
                 </td>
                 <td>
