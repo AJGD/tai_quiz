@@ -1,5 +1,6 @@
 """Forms"""
 from django import forms
+from django.forms.widgets import TextInput
 
 from .models import Question, Quiz, Player
 
@@ -95,6 +96,13 @@ class FilterQuizForm(forms.ModelForm):
                                     required=False)
     category = forms.TypedChoiceField(choices=general_categories, required=False, initial="ALL")
     topic = forms.CharField(max_length=50, required=False)
+
+    def __init__(self, *args, **kwargs):
+        super(FilterQuizForm, self).__init__(*args, **kwargs)
+        for field in iter(self.fields):
+            self.fields[field].widget.attrs.update({
+                'id': field
+            })
 
     class Meta:
         model = Quiz
