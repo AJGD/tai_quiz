@@ -24,7 +24,7 @@ class FilterTestClass(LiveServerTestCase):
     def tearDown(self):
         self.selenium.quit()
 
-    def testNameFilterPage(self):
+    def test_name_filter_page(self):
         """test filtering by name"""
         selenium = self.selenium
         # Opening the link we want to test
@@ -44,7 +44,7 @@ class FilterTestClass(LiveServerTestCase):
         # check the returned result
         assert selenium.page_source.count(inserted_text) == amount
 
-    def testAuthorFilterPage(self):
+    def test_author_filter_page(self):
         """test filtering by author"""
         selenium = self.selenium
         inserted_text = 'Bobby'
@@ -65,7 +65,7 @@ class FilterTestClass(LiveServerTestCase):
         # check the returned result
         assert (selenium.page_source.count(inserted_text) - 1) == amount
 
-    def testCategoryFilterPage(self):
+    def test_category_filter_page(self):
         """test filtering by category"""
         selenium = self.selenium
         inserted_text = 'TRAVEL'
@@ -85,7 +85,7 @@ class FilterTestClass(LiveServerTestCase):
         # check the returned result
         assert (selenium.page_source.count(inserted_text) - 1) == amount
 
-    def testTopicFilterPage(self):
+    def test_topic_filter_page(self):
         """test filtering by topic"""
         selenium = self.selenium
         inserted_text = 'Spain'
@@ -105,7 +105,7 @@ class FilterTestClass(LiveServerTestCase):
         # check the returned result
         assert selenium.page_source.count(inserted_text) == amount
 
-    def testTopicAndAuthorFilterPage(self):
+    def test_topic_and_author_filter_page(self):
         """test filtering by topic"""
         selenium = self.selenium
         inserted_topic = 'Spain'
