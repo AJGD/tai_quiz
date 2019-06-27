@@ -154,7 +154,15 @@ class CreateLinkForLoggedTestClass(LiveServerTestCase):
 
     def setUp(self):
         self.selenium = webdriver.Firefox()
-        self.player = Player.objects.create(username="Bobby", password="Zachannasian")
+        self.selenium.get(self.live_server_url + '/account/signup/')
+        username = self.selenium.find_element_by_id('id_username')
+        password1 = self.selenium.find_element_by_id('id_password1')
+        password2 = self.selenium.find_element_by_id('id_password2')
+        submit = self.selenium.find_element_by_xpath('//button[text()="Sign up"]')
+        username.send_keys('Cobby')
+        password1.send_keys("Zachannasian")
+        password2.send_keys("Zachannasian")
+        submit.click()
 
     def tearDown(self):
         self.selenium.quit()
@@ -169,14 +177,12 @@ class CreateLinkForLoggedTestClass(LiveServerTestCase):
         submit = selenium.find_element_by_xpath('//button[text()="Login"]')
 
         # Fill the form with data
-        username.send_keys('Bobby')
+        username.send_keys('Cobby')
         password.send_keys('Zachannasian')
 
         # submitting the form
         submit.click()
 
-        print(selenium.current_url)
         selenium.get(self.live_server_url)
-        print(selenium.current_url)
 
         assert selenium.page_source.count("Logout") != 0
