@@ -6,7 +6,8 @@ for said quizzes are generated based on Wikipedia assets.
 ### With Docker
 
 First, delete or comment out the last line in `Dockerfile` (it's indicated by a comment). Then from the root directory use 
-`docker-compose up`. If everything goes right the application should be available on `127.0.0.1:8000`.
+`docker-compose up`. If everything goes right the application should be available on `[your docker address]:8000` (default it 
+`192.168.99.100`).
 
 ### Without Docker
 
