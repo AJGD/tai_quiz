@@ -18,6 +18,6 @@ jobs:
 #    - name: "tests"
 #      script: "cd quiz && python manage.py test accounts.tests quizzes.tests"
     - name: "linter"
-      script: "cd quiz && pylint quiz quizzes accounts"
+      script: "cd quiz && pylint quiz quizzes questions accounts"
     - name: "type analysis"
-      script: "cd quiz && mypy quiz quizzes accounts --ignore-missing-imports"
+      script: "cd quiz && mypy quiz quizzes questions accounts --ignore-missing-imports"

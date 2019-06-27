@@ -37,6 +37,7 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 INSTALLED_APPS = [
     'quizzes.apps.QuizzesConfig',
     'accounts.apps.AccountsConfig',
+    'questions.apps.QuestionsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -44,6 +45,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'social_django',
+    'bootstrap_datepicker_plus',
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+
+{% block navbar %}
+<ul class="nav navbar-nav">
+    <li><a href="{% url 'quizzes:index' %}">Home</a></li>
+    {% if user.is_authenticated %}
+    <li class="active"><a href="{% url 'quizzes:create' %}">Create</a></li>
+    <li><a href="{% url 'quizzes:my_quizzes' %}">Your quizzes</a></li>
+    {% endif %}
+    <li><a href="{% url 'quizzes:quizzes' %}">Play</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}"><span class=" glyphicon glyphicon-log-out"></span> Logout</a></li>
+    {% else %}
+    <li><a href="{% url 'accounts:signup' %}"><span class=" glyphicon glyphicon-user"></span> Sign Up</a></li>
+    <li><a href="{% url 'login' %}"><span class=" glyphicon glyphicon-log-in"></span> Login</a></li>
+    {% endif %}
+</ul>
+{% endblock navbar %}
+
+{% block content %}
+
+<div class="container-fluid">
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li
+                {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+        </li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <div class="jumbotron">
+
+        {% if user.is_authenticated %}
+        {% if article == '' %}
+        <h2>
+            This question will ask the user how many times article <i>{{ title }}</i> was viewed during a month you
+            will now choose.
+        </h2>
+        {% else %}
+        <h2>
+            Currently this question is: <i>{{ article }}</i> .
+        </h2>
+        <h2>Change the month using the form below or accept the question by clicking one of the buttons.</h2>
+        <div>
+            <a href="{% url 'questions:questions' quiz_id=quiz.id %}">
+                <button type="button" class="btn btn-default" id="user_quizzes_left">Save and move to
+                    questions list
+                </button>
+            </a>
+            <a href="{% url 'questions:create_question' quiz_id=quiz.id %}">
+                <button type="button" class="btn btn-default" id="add_next_question_left">Save and add
+                    next question
+                </button>
+            </a>
+        </div>
+        <br/><br/>
+        Change the month:
+        {% endif %}
+
+        {{ form.media }}
+        <form method="POST" style="max-width: 300px">
+            {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Confirm">
+        </form>
+
+        {% else %}
+        <div class="container">
+            <div class="alert alert-danger">
+                This page is available only for logged users.
+            </div>
+            <div class="text-center">
+                <h1 class="glyphicon glyphicon-lock"></h1>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock content %}

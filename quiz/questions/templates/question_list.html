@@ -58,11 +58,16 @@
                 <td> {{ question.published_date }}</td>
                 <td> {{ question.question_text }}</td>
                 <td>
-                    <a href="{% url 'quizzes:create_question_title' article_id=question.article_id question_id=question.id %}"
+                    {% if question.type == "Title"%}
+                    <a href="{% url 'questions:create_question_title' article_id=question.article_id question_id=question.id %}"
                        class="btn btn-default" role="button" name="edit_button">Edit</a>
+                    {% else %}
+                    <a href="{% url 'questions:create_question_type_stat' article_id=question.article_id question_id=question.id %}"
+                       class="btn btn-default" role="button" name="edit_button">Edit</a>
+                    {% endif %}
                 </td>
                 <td>
-                    <a href="{% url 'quizzes:delete_question' quiz_id=question.quiz.id question_id=question.id %}"
+                    <a href="{% url 'questions:delete_question' quiz_id=question.quiz.id question_id=question.id %}"
                        class="btn btn-danger" role="button" name="edit_button">Delete</a>
                 </td>
 
@@ -90,6 +95,19 @@
             <li class="disabled"><span>&raquo;</span></li>
             {% endif %}
         </ul>
+
+        <br/>
+        <br/>
+        <div class="text-right">
+        <a href="{% url 'questions:questions' quiz_id=quiz.id %}">
+            <button type="button" class="btn btn-default" id="user_quizzes">Questions list
+            </button>
+        </a>
+        <a href="{% url 'questions:create_question' quiz_id=quiz.id %}">
+            <button type="button" class="btn btn-default" id="add_next_question">Add next question
+            </button>
+        </a>
+        </div>
 
     </div>
 </div>
