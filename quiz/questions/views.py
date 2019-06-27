@@ -55,7 +55,7 @@ def create_question_title(request: HttpRequest, article_id, question_id) -> Http
 
 def replace_word(form, question):
     word = form.cleaned_data['word']
-    question.question_text = question.question_text.replace(word, len(word) * "_")
+    question.question_text = question.question_text.replace(word, len(word) * " _")
 
 
 def initialize_question(article_id, question):

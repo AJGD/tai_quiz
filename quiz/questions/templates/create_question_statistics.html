@@ -42,12 +42,21 @@
         </h2>
         {% else %}
         <h2>
-            Currently this question is: <i>{{ article }}</i> . Change
-            the month using the form below or accept the question.
+            Currently this question is: <i>{{ article }}</i> .
         </h2>
-        <a href="{% url 'questions:questions' quiz_id=quiz.id %}">
-            <button type="button" class="btn btn-primary">Accept the question</button>
-        </a>
+        <h2>Change the month using the form below or accept the question by clicking one of the buttons.</h2>
+        <div>
+            <a href="{% url 'questions:questions' quiz_id=quiz.id %}">
+                <button type="button" class="btn btn-default" id="user_quizzes_left">Save and move to
+                    questions list
+                </button>
+            </a>
+            <a href="{% url 'questions:create_question' quiz_id=quiz.id %}">
+                <button type="button" class="btn btn-default" id="add_next_question_left">Save and add
+                    next question
+                </button>
+            </a>
+        </div>
         <br/><br/>
         Change the month:
         {% endif %}
